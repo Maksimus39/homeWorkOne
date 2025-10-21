@@ -1,150 +1,85 @@
-// ------------------------------- optional types -------------
+// Массивы
+// Циклы
 
-// task_1
+// Массив это упорядоченный набор данных
 
-var name: String? = nil
-name = "Максим"
-print(name)
+var user: String = "Oleg"
+
+var users: [String] = ["Oleg", "Petya", "Sasha"]
+
+print(users)
+
+users.append("Ivan")
+print(users)
 
 
-// task_2
+var symbol: [Character] = ["O", "l", "e", "g"] // index = count - 1
+print(type(of: symbol))
 
-var age: Int? = nil
 
-if let userAge = age {
-    print(userAge)
+// add element
+
+users.append("Islam")
+
+
+// in index
+
+users.insert("Diman", at: 1)
+print(users)
+
+
+//  delete index
+
+users.remove(at: 2)
+print("users -> \(users)")
+
+
+// find and delete name Oleg
+
+if let index = users.firstIndex(of: "Oleg") {
+    users.remove(at: index)
+}
+print("users -> \(users)")
+
+
+// reversed
+
+let reversedArray = users.reversed()
+print("reversedArray -> \(reversedArray.first!)")
+
+
+// polindrom
+
+let polindrom: [Character] = ["a", "n", "n", "a"]
+ 
+if polindrom == polindrom.reversed(){
+    print("Yes")
 } else {
-    print("Dозраст не указан")
-}
-
-
-// task_3
-
-var nickname: String? = "ErrorNil"
-
-if let errorNillNickName = nickname {
-    print("Твой ник: \(errorNillNickName)")
-} else {
-    print("Ника нет")
-}
-
-
-// task_4
-
-var email: String? = nil
-
-if let emailOptional = email {
-    print("Твой email: \(emailOptional)")
-} else {
-    print("email не задан")
-}
-
-
-// task_5
-
-var nameFive: String? = "Boris"
-var ageFive: Int? = 23
-var cityFive: String? = "Rom"
-
-print("Имя: \(nameFive ?? "Имя не указано")")
-print("Возраст: \(ageFive ?? 0 )")
-print("Город: \(cityFive ?? "Город не указан")")
-
-
-
-// task_6
-
-var score: Int? = 85
-
-if let userScore = score {
-    if userScore >= 80 {
-        print("Отлично")
-    } else if userScore >= 50 {
-        print("Хорошо")
-    } else {
-        print("Нужно подтянуть")
-    }
-} else {
-    print("Нет данных")
-}
-
-
-// task_7
-
-var numberString: String? = "42"
-
-if let numberStringInt = Int(numberString ?? "") {
-    print("Число: \(numberStringInt)")
-    print(type(of: numberStringInt))
-} else {
-    print("Некоректное значение")
-}
-
-
-// task_8
-
-var day = 10
-
-switch day {
-case 1: print("Понедельник")
-case 2: print("Вторник")
-case 3: print("Среда")
-default : print("День не распознан")
-}
-
-
-// task_9
-
-var color = "ыва"
-
-switch color {
-case "red": print("Стой")
-case "yellow": print("Жди")
-case "green": print("Иди")
-default: print("Неизвестный цвет")
-}
-
-
-// ----------------------------- Доп --------------------------
-
-// task_1
-
-var numberStringTwo: String? = "123"
-
-if let numInt = Int(numberStringTwo ?? "") {
-    print("Число: \(numInt)")
-    print(type(of: numInt))
-} else {
-    print("Не удалось преобразовать")
+    print("No")
 }
 
 
 
-// task_2
 
-var userName: String? = "Alice"
-var password: String? = nil
+// ------------------------------- циклы ----------------------------
 
-
-if let name = userName , let _ = password {  // я тут опустил переменную т.к она не используется и горит предупреждение
-    print("Добро пожаловать, \(name)")
-} else {
-    print("Введите имя и пароль")
+for us in users {
+    print("us -> \(us)")
 }
 
 
-// task_3
+// while
 
-var nameTwo: String? = "Bob"
-var emailTwo: String? = nil
-var country: String? = "Kazahstan"
+let str:String = "A роза упала на лапу Азора"
 
+// полиндром
 
-if let nameOptional = nameTwo, let emailOptionalTwo = emailTwo, let countryOptional = country {
-    print("Профиль: \(nameOptional), \(emailOptionalTwo), \(countryOptional)")
-} else {
-    print("Заполните все поля.")
+let reversedStr = str.reversed()
+
+var strArray: [Character] = []
+
+for item in str {
+    strArray.append(item)
 }
 
-
-
+print(strArray)
