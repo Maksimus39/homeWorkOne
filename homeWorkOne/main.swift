@@ -1,160 +1,99 @@
-// ------------------ Concatenation --------------
-
 // task_1
 
-let firstName:String = "Максим"
-let lastName:String = "Минаков"
-let fullName:String = firstName + " " + lastName
+let numbers = [1, 2, 3, 2, 4, 1, 5]
+print("numbers -> \(numbers)")
 
-print("fullName -> \(fullName)")
+let uniqueNumbers = Set(numbers)
+print("uniqueNumbers -> \(uniqueNumbers)")
 
 
 
 // task_2
 
-let age:UInt8 = 42
+let a = [1, 2, 3, 4]
+let b = [3, 4, 5, 6]
 
-let resultMessage = "Меня зовут " + firstName + ", и мне " + String(age) + " года."
-print("resultMessage -> \(resultMessage)")
+let combinedArray = a + b
 
-
-// task 3
-
-print("Введите первое число.")
-let firstNumber = Int(readLine()!)!
-
-print("Введите второе число.")
-let secondNumber = Int(readLine()!)!
-
-let sumResult = firstNumber + secondNumber
-let sumFirstandSecondNumber = "Сумма чисел " + String(firstNumber) + " и " + String(secondNumber) + " равна " + String(sumResult) + "."
-print("sumFirstandSecondNumber -> \(sumFirstandSecondNumber)")
-
-
-
-
-// --------------------- string interpolation ---------------
-
-// task_1
-
-let ageTestIntorpolation:UInt8 = 42
-
-let resultMessageInterpolation = "Меня зовут \(firstName), и мне \(age) года."
-print("resultMessageInterpolation -> \(resultMessageInterpolation)")
-
-
-// task_2
-
-print("Введите ваш вес в кг:")
-let weight = Double(readLine()!)!
-
-print("Введите ваш рост в см:")
-let heightCm = Double(readLine()!)!
-
-let heightM = heightCm / 100
-
-let bmi = weight / (heightM * heightM)
-
-print("Ваш ИМТ равен: \(bmi)")
+let uniqueElementsSet = Set(combinedArray)
+print("uniqueElementsSet -> \(uniqueElementsSet)")
 
 
 
 // task_3
 
-let productName:String = "MacBooK Air"
-let price:Int = 54_000
-let quantity:Int = 22
+let first:Set = [1, 2, 3, 4]
+let second:Set = [3, 4, 5, 6]
 
-let totalPrice = "Вы добавили в корзину \(quantity) шт. Товара \(productName) на сумму \(price * quantity) руб"
-
-print("totalPrice -> \(totalPrice)")
+let symmetricDifference = first.symmetricDifference(second)
+print("symmetricDifference -> \(symmetricDifference)")
 
 
+// task_4
 
-// ----------------- main data types ------------
-
-// task_1
-
-var minIntSixTeen:Int16 = -32_768
-var numberUintEight:UInt8 = 200
-var numberDouble:Double = 3.1415926535
-var isBool:Bool = false
-let message:String = "Боятся нужно только Бога"
+let text = "Hello, world!"
+let uniqueLetters = Set(text.lowercased().filter{ $0.isLetter })
+print("uniqueLetters -> \(uniqueLetters)")
 
 
 
-// task_2
-
-print("Пользователь, введите целое число?")
-
-let inputNumber = Int(readLine()!)!
-
-let squareNumber = inputNumber * inputNumber
-print("Результат возведения числа в квадрат равен \(squareNumber)")
-
-
-// task_3
-
-let inputNumberTwo = 42
-let isEven:Bool
-
-isEven = inputNumberTwo % 2 == 0
-print("Введённое число является \(isEven) значением.")
-
-
-
-
-// --------------------- variable and constant -------------------------
+// ----------------------- Dictionary ---------------------------------
 
 // task_1
 
-var temperature:Int8 = 7
-temperature = 10
+let capitals = ["Kazakhstan":"Astana", "France":"Paris", "Japan":"Tokio"]
 
+var newDictionary: [String: String] = [:]
 
-// task_2
-
-let birthYear:Int16 = 1983          // Выбрал данный тип так как было время и до нашей эры а более чем 32 века у нас значительный запас
-//birthYear = 1982                  // константа подразумевает объявление присвоенного значения в переменной единожды
-
-
-// task_3
-
-var count = 10
-//count = "Mobile IOS developer"
-
-/*
- Тут произошло следующее: я могу ошибаться но или компилятор
-  или интерпритатор по умолчанию задаст переменной тип при
-  объявлении без явного присвоения типа как type notation
-  а потом я вмешиваюсь и явно пытаюсь изменить не только значение
-  но и сам тип данных и язык это не допустит
- */
-
-
-
-// ---------------------- if/else ------------------
-
-// task_1
-
-let testNumber = 345_123
-
-if testNumber > 0 {
-    print("Число \(testNumber), является положительным")
-} else if testNumber < 0 {
-    print("Число \(testNumber), является отрицательным")
-} else {
-    print("Число \(testNumber), является нулём")
+for (key, value) in capitals {
+    newDictionary[value] = key
 }
 
+print("newDictionary -> \(newDictionary)")
 
 
 // task_2
 
-let userAge = 42
 
-if userAge >= 18 {
-    print("Доступ разрешён!")
-} else {
-    print("Доступ запрещён!")
+let words = ["apple", "banana", "avocado", "blueberry", "cherry", "apricot"]
+
+let groupDict = Dictionary(grouping: words, by: { $0.first! })
+print("groupDict -> \(groupDict)")
+
+
+
+// task_3
+
+let textTwo = "banana"
+
+var charCount: [Character: Int] = [:]
+
+for char in textTwo {
+    charCount[char, default: 0] += 1
 }
+
+print("charCount -> \(charCount)")
+
+
+
+// task_4
+
+let votes = ["Alice", "Bob", "Alice", "Charlie", "Bob", "Alice"]
+
+var voteCount: [String: Int] = [:]
+
+for vote in votes {
+    voteCount[vote, default: 0] += 1
+}
+
+print("voteCount -> \(voteCount)")
+
+
+// task_5
+
+let wordsTwo = ["cat", "dog", "elephant", "bat", "apple"]
+
+var letterCount: [Int: [String]] = [:]
+
+letterCount = Dictionary(grouping: wordsTwo) { $0.count }
+print("letterCount -> \(letterCount)")
