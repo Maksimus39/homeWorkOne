@@ -1,99 +1,111 @@
-// task_1
+// function
 
-let numbers = [1, 2, 3, 2, 4, 1, 5]
-print("numbers -> \(numbers)")
-
-let uniqueNumbers = Set(numbers)
-print("uniqueNumbers -> \(uniqueNumbers)")
-
-
-
-// task_2
-
-let a = [1, 2, 3, 4]
-let b = [3, 4, 5, 6]
-
-let combinedArray = a + b
-
-let uniqueElementsSet = Set(combinedArray)
-print("uniqueElementsSet -> \(uniqueElementsSet)")
-
-
-
-// task_3
-
-let first:Set = [1, 2, 3, 4]
-let second:Set = [3, 4, 5, 6]
-
-let symmetricDifference = first.symmetricDifference(second)
-print("symmetricDifference -> \(symmetricDifference)")
-
-
-// task_4
-
-let text = "Hello, world!"
-let uniqueLetters = Set(text.lowercased().filter{ $0.isLetter })
-print("uniqueLetters -> \(uniqueLetters)")
-
-
-
-// ----------------------- Dictionary ---------------------------------
-
-// task_1
+// DRY - не повторяй себя
+// KISS -
+// YAGNI -
 
 let capitals = ["Kazakhstan":"Astana", "France":"Paris", "Japan":"Tokio"]
 
-var newDictionary: [String: String] = [:]
+var newDict: [String:String] = [:]
 
 for (key, value) in capitals {
-    newDictionary[value] = key
+    newDict[value] = key
 }
 
-print("newDictionary -> \(newDictionary)")
-
-
-// task_2
-
-
-let words = ["apple", "banana", "avocado", "blueberry", "cherry", "apricot"]
-
-let groupDict = Dictionary(grouping: words, by: { $0.first! })
-print("groupDict -> \(groupDict)")
+print("newDict -> \(newDict)")
 
 
 
-// task_3
 
-let textTwo = "banana"
+// 4 типа функции
 
-var charCount: [Character: Int] = [:]
+// 1 - простая функция - ничего не принимает и ничего не возвращает
 
-for char in textTwo {
-    charCount[char, default: 0] += 1
+func randomElement(){
+    print(Int.random(in: 0...100))
 }
 
-print("charCount -> \(charCount)")
+randomElement()
 
 
+// ------------ 2 - принимает данные, но ничего не возвращает
 
-// task_4
+//let login: String = "login"
+//let password:String = "qwerty"
 
-let votes = ["Alice", "Bob", "Alice", "Charlie", "Bob", "Alice"]
-
-var voteCount: [String: Int] = [:]
-
-for vote in votes {
-    voteCount[vote, default: 0] += 1
+func loginUser ( login:String, password:String ) {
+    if login == "admin" &&  password == "qwerty" {
+        print("It` is Admin")
+    } else {
+        print("Error")
+    }
 }
 
-print("voteCount -> \(voteCount)")
+loginUser ( login: "admin", password: "qwerty" )
 
 
-// task_5
 
-let wordsTwo = ["cat", "dog", "elephant", "bat", "apple"]
+func changeKeys (dict: [String:String]) {
+    var newDict: [String:String] = [:]
+    
+    for (key, value) in dict {
+        newDict[value] = key
+    }
+    
+    print(newDict)
+}
 
-var letterCount: [Int: [String]] = [:]
+let capitalsTwo = ["Kazakhstan":"Astana", "France":"Paris", "Japan":"Tokio"]
 
-letterCount = Dictionary(grouping: wordsTwo) { $0.count }
-print("letterCount -> \(letterCount)")
+changeKeys(dict: capitalsTwo)
+
+
+
+// ------- 3 - функция принимает и возвращает данные
+
+func validatePassword (password: String) -> Bool {
+    // >8
+    // 1
+    // -> true/false
+    
+    if password.count >= 8 && password.contains("1") {
+        return true
+    } else {
+        return false
+    }
+}
+
+
+let isValid = validatePassword( password: "12345678" )
+if isValid {
+    print("isValid -> \(isValid)")
+}
+
+
+
+
+// -------- 4 - ничего не принимает но что то возвращает
+
+
+func randomInt () -> Int {
+    return Int.random(in: 0..<10)
+}
+
+let res = randomInt()
+print("res -> \(res)")
+
+
+
+var isUserOnline = true
+func isLogin () -> Bool {
+    
+    return !isUserOnline
+}
+
+
+let r = isLogin()
+print("r -> \(r)")
+
+
+
+// Создай метод который возвращает что - то 
