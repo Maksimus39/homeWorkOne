@@ -1,111 +1,121 @@
-// function
-
-// DRY - не повторяй себя
-// KISS -
-// YAGNI -
-
-let capitals = ["Kazakhstan":"Astana", "France":"Paris", "Japan":"Tokio"]
-
-var newDict: [String:String] = [:]
-
-for (key, value) in capitals {
-    newDict[value] = key
-}
-
-print("newDict -> \(newDict)")
+// -------------- homeWorkFunction --------------
 
 
+// Простой уровень
 
+// task_1
 
-// 4 типа функции
-
-// 1 - простая функция - ничего не принимает и ничего не возвращает
-
-func randomElement(){
-    print(Int.random(in: 0...100))
-}
-
-randomElement()
-
-
-// ------------ 2 - принимает данные, но ничего не возвращает
-
-//let login: String = "login"
-//let password:String = "qwerty"
-
-func loginUser ( login:String, password:String ) {
-    if login == "admin" &&  password == "qwerty" {
-        print("It` is Admin")
-    } else {
-        print("Error")
+func sumOfArray (arg: [Int]) -> Int {
+    
+    var res: Int = 0
+    for item in arg {
+        res += item
     }
+    return res
+    
 }
 
-loginUser ( login: "admin", password: "qwerty" )
+
+let resultSumArray = sumOfArray(arg: [1, 2, 3])
+print("resultSumArray -> \(resultSumArray)")
 
 
 
-func changeKeys (dict: [String:String]) {
-    var newDict: [String:String] = [:]
+// task_2
+
+func countEvenNumbers (arg: [Int]) -> Int {
+    var item: Int = 0
     
-    for (key, value) in dict {
-        newDict[value] = key
+    for i in arg {
+        i % 2 == 0 ? item += 1 : nil // насчёт nill я не уверен, т.е сейчас это работает а как будет с интерфейсом я не знаю
+    }
+    return item
+}
+
+let evenNumbersCount = countEvenNumbers(arg: [1, 2, 3, 4])
+print("evenNumbersCount -> \(evenNumbersCount)")
+
+
+// task_3
+
+
+func lenghtWord (arg: [String]) -> [String: Int] {
+    
+    var item: [String: Int] = [:]
+    
+    for i in arg {
+        item[i] = i.count
+    }
+    return item
+}
+
+
+let resLenght = lenghtWord(arg: ["Swiwt", "IOS"])
+print("resLenght -> \(resLenght)")
+
+
+
+
+// -------------- Средний уровень ---------------
+
+
+// task_1
+
+func countRepeat (arg: [Int]) -> [Int:Int] {
+    var item: [Int: Int] = [:]
+    
+    for i in arg {
+        item[i] = (item[i] ?? 0) + 1
     }
     
-    print(newDict)
+    return item
 }
 
-let capitalsTwo = ["Kazakhstan":"Astana", "France":"Paris", "Japan":"Tokio"]
-
-changeKeys(dict: capitalsTwo)
-
+let count = countRepeat(arg: [1, 2, 2, 3, 1])
+print("count -> \(count)")
 
 
-// ------- 3 - функция принимает и возвращает данные
 
-func validatePassword (password: String) -> Bool {
-    // >8
-    // 1
-    // -> true/false
+// task_2
+
+func arrMerge (a: [String], b: [String]) -> [String] {
+    var res: [String] = []
+    res = a + b
+    return Array(Set(res))
+}
+
+
+let merge = arrMerge(a: ["a", "b", "c"], b: ["b", "c", "d"])
+print("merge -> \(merge)")
+
+
+
+// task_3
+
+
+func countWord(arg: [String]) -> String {
+    var countDict: [String: Int] = [:]
+    var item = ""
     
-    if password.count >= 8 && password.contains("1") {
-        return true
-    } else {
-        return false
+
+    for i in arg {
+        if let currentCount = countDict[i] {
+            countDict[i] = currentCount + 1
+        } else {
+            countDict[i] = 1
+        }
     }
-}
-
-
-let isValid = validatePassword( password: "12345678" )
-if isValid {
-    print("isValid -> \(isValid)")
-}
-
-
-
-
-// -------- 4 - ничего не принимает но что то возвращает
-
-
-func randomInt () -> Int {
-    return Int.random(in: 0..<10)
-}
-
-let res = randomInt()
-print("res -> \(res)")
-
-
-
-var isUserOnline = true
-func isLogin () -> Bool {
     
-    return !isUserOnline
+    var maxCount = 0
+    for (word, count) in countDict {
+        if count > maxCount {
+            maxCount = count
+            item = word
+        }
+    }
+    
+    return item
 }
 
-
-let r = isLogin()
-print("r -> \(r)")
-
-
-
-// Создай метод который возвращает что - то 
+let word = countWord(arg: ["apple", "banana", "apple", "orange"])
+print("word -> \(word)")
