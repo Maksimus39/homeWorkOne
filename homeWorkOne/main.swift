@@ -27,7 +27,9 @@ func countEvenNumbers (arg: [Int]) -> Int {
     var item: Int = 0
     
     for i in arg {
-        i % 2 == 0 ? item += 1 : nil // насчёт nill я не уверен, т.е сейчас это работает а как будет с интерфейсом я не знаю
+       if i % 2 == 0 {
+            item += 1
+        }
     }
     return item
 }
