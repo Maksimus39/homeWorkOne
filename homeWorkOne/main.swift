@@ -1,202 +1,160 @@
-// свой тип и задать определённые значения
+// task_1
 
-enum Operation: Character {
-    case plus = "+"
-    case minus = "-"
-    case multiply = "*"
-    case divide = "/"
+enum Diection {
+    case north
+    case south
+    case east
+    case west
 }
 
-
-func calculator(a: Int, b: Int, operating: Operation) -> Int {
-    switch operating {
-    case .plus:
-        return a + b
-    case .minus:
-        return a - b
-    case .multiply:
-        return a * b
-    case .divide:
-        return a / b
+func move(direction: Diection){
+    switch direction {
+    case .north:
+        print("Go up")
+    case .south:
+        print("Go down")
+    case .east:
+        print("Go right")
+    case .west:
+        print("Go left")
     }
 }
 
-let res = calculator(a: 1, b: 2, operating: .plus)
-print("res -> \(res)")
+move(direction: .north)
+move(direction: .south)
+move(direction: .east)
+move(direction: .west)
 
 
 
+// task_2
 
-enum Screen {
-    case register, login
+enum Gamelevel: String {
+    case easy = "Easy"
+    case medium = "Medium"
+    case hard = "Hard"
 }
 
-
-func showScreen(screen: Screen) -> String {
-    switch screen {
-    case .register:
-        return "Введите ваши данные"
-    case .login:
-        return "Спасибо, мы обрабатываем результат!"
+func startGame( level: String ){
+    if let gameLwl = Gamelevel(rawValue: level){
+        switch gameLwl {
+        case .easy:
+            print("Это лёгкий уровень")
+        case .medium:
+            print("Это средний уровень")
+        case .hard:
+            print("Это сложный уровень")
+        }
+    } else {
+        print("Unknown lewel")
     }
 }
 
-let output = showScreen(screen: .login)
-print("output -> \(output)")
+startGame(level: "Easy")
+startGame(level: "Medium")
+startGame(level: "Hard")
+
+startGame(level: "Advanced lewel")
 
 
 
-// rowValue
+// task_3
 
-
-enum NetworkError: Int {
-    case success = 200
-    case notFound = 404
-    case forbidden = 201
-    case unknownError = 500
+enum Payment {
+    case cash(Double)
+    case card(number: String, amount: Double)
+    case crypto(wallet: String, amount: Double)
 }
 
 
-//let error: NetworkError = .success
-//print("error.rawValue -> \(error.rawValue)")
-//print("error.hashValue -> \(error.hashValue)")
-
-
-func errorCheck(error: NetworkError){
-    print("Error: \(error.rawValue)")
-}
-
-errorCheck(error: .unknownError)
-
-
-
-enum CompassPoint: CaseIterable {
-    case north, south, east, west
-}
-
-let allValue: [CompassPoint] = CompassPoint.allCases
-print("allValue -> \(allValue)")
-
-
-
-// ассоциированные значения
-
-enum ScreenState {
-    case loading
-    case loaded(data: [String])
-    case error(message: [String])
-}
-
-
-func renderScreen(state: ScreenState) {
-    switch state {
-    case .loading:
-        print("Loading...")
-    case .loaded(data: let data):
-        print("Data loaded: \(data)")
-    case .error(message: let message):
-        print("Error: \(message)")
+func process(payment: Payment){
+    switch payment {
+    case .cash(let double):
+        print("У тебя наличными \(double)$ долларов ")
+    case .card(let number, let amount):
+        print("У тебя номер карты \(number), и на ней \(amount)$ долларов ")
+    case .crypto(let wallet, let amount):
+        print("У тебя на цифровом активе \(wallet), капитализация составляет \(amount)$ долларов ")
     }
 }
 
-renderScreen(state: .loaded(data: ["Maksim"]))
+process(payment: .cash(100_000))
+process(payment: .card(number: "12345", amount: 150_000))
+process(payment: .crypto(wallet: "холодный кошелёк", amount: 200_000))
 
 
-enum Page {
-    case main
-    case details (image: [String], tags: [String], description: [String])
+
+// task_4
+
+enum AppEvent {
+    case login(user: String)
+    case logout(user: String)
+    case error(message: String)
+    case purchase(user: String, amount: Double)
 }
 
-let firstPage: Page = .details(image: ["img1", "img2"], tags: ["tag1", "tag2"], description: ["lorem ipsum"])
-let secondPage: Page = .details(image: ["img3", "img4"], tags: ["tag3", "tag4"], description: ["lorem ipsum - 2"])
-
-
-func showPage(page: Page) {
-    switch page {
-    case .main:
-        print("Main page")
-    case .details(image: let images, tags: let tags, description: let descriptions):
-        print("Images: \(images)")
-        print("Tags: \(tags)")
-        print("Descriptions: \(descriptions)")
+func autentification(input: AppEvent){
+    switch input {
+    case .login(let user):
+        print("Пользователь \(user) вошёл в приложение")
+    case .logout(let user):
+        print("Пользователь \(user) вышел из приложения")
+    case .error(let message):
+        print("Внимание! \(message)")
+    case .purchase(_, let amount) where amount > 1000:
+        print("Big spender")
+    case .purchase(let user, let amount):
+        print("Пользователь \(user), произвёл покупку на сумму \(amount) рублей")
     }
 }
 
-showPage(page: .details(image: ["img1", "img2"], tags: ["tags1", "tags2"], description: ["Lorem ipsum - 2"]))
+autentification(input: .login(user: "Джон"))
+autentification(input: .logout(user: "Майкл"))
+autentification(input: .error(message: "Завершило работу экстренно"))
+autentification(input: .purchase(user: "Inna", amount: 999))
+autentification(input: .purchase(user: "Inna", amount: 10_000))
 
 
-showPage(page: secondPage)
+// task_5
 
-
-
-// -------------------------
-
-enum Temperature {
-    case celsius(Double)
-    case fahrenheit(Double)
+enum Notification {
+    case message(user: String, text: String)
+    case friendRequest(user: String)
+    case system(message: String)
 }
 
-
-func convertToCelsius( temperatura: Temperature ) {
-    switch temperatura {
-    case .celsius(let value) where value > 35:
-        print("Это слишком высокая температура")
-        
-    case .celsius(let value):
-        print("температура \(value) градусов цельсия")
-        
-    case .fahrenheit(let value):
-        print("температура \(value) градусов фаренгейт")
-        
+func handle(notification: Notification){
+    switch notification {
+    case .message(let user, let text):
+        print("Пользователь \(user) введите \(text)")
+    case .friendRequest(let user):
+        print("Пользователю \(user) пришло сообщение")
+    case .system(let message):
+        print("Вам \(message)")
     }
 }
 
-let temp:Temperature = .celsius(36)
-let faren:Temperature = .fahrenheit(40)
-
-
-convertToCelsius(temperatura: temp)
-convertToCelsius(temperatura: faren)
-
-//convertToCelsius(fahrenheit: .celsius(30))
+handle(notification: .message(user: "Ivan", text: "Пароль"))
+handle(notification: .friendRequest(user: "Marina"))
+handle(notification: .system(message: "уведомление"))
 
 
 
-indirect enum State {
-    case ok
-    case err
-    case stateValue(State)
+// task_6
+
+enum DownloadResult {
+    case success(filePath: String, size: Int)
+    case failure(error: String)
 }
 
-
-let state:State = .stateValue(.stateValue(.err))
-
-
-// Вложенный enum
-
-enum Transport {
-    enum CarType {
-        case electric
-        case petrol
+func downloadFile(complection: DownloadResult){
+    switch complection {
+    case .success(let filePath, let size):
+        print("Путь к файлу \(filePath), и его размер составляет \(size) kb")
+    case .failure(let error):
+        print("\(error) загрузки")
     }
-    
-    case car (type: CarType)
-    case bicycle
 }
 
-
-let transport: Transport = .car(type: .electric)
-
-
-switch transport {
-case .car(type: .electric):
-    // code
-    print("Эта машина электричка")
-case .car(type: .petrol):
-    // code
-    print("Эта машина бензиновая")
-case .bicycle:
-    //
-    print("Эта велосипед")
-}
-
+downloadFile(complection: .success(filePath: "/../../book", size: 3))
+downloadFile(complection: .failure(error: "Ошибка"))
