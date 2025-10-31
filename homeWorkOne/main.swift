@@ -1,160 +1,160 @@
-// ------------------ Concatenation --------------
-
 // task_1
 
-let firstName:String = "Максим"
-let lastName:String = "Минаков"
-let fullName:String = firstName + " " + lastName
+enum Diection {
+    case north
+    case south
+    case east
+    case west
+}
 
-print("fullName -> \(fullName)")
+func move(direction: Diection){
+    switch direction {
+    case .north:
+        print("Go up")
+    case .south:
+        print("Go down")
+    case .east:
+        print("Go right")
+    case .west:
+        print("Go left")
+    }
+}
+
+move(direction: .north)
+move(direction: .south)
+move(direction: .east)
+move(direction: .west)
 
 
 
 // task_2
 
-let age:UInt8 = 42
+enum Gamelevel: String {
+    case easy = "Easy"
+    case medium = "Medium"
+    case hard = "Hard"
+}
 
-let resultMessage = "Меня зовут " + firstName + ", и мне " + String(age) + " года."
-print("resultMessage -> \(resultMessage)")
+func startGame( level: String ){
+    if let gameLwl = Gamelevel(rawValue: level){
+        switch gameLwl {
+        case .easy:
+            print("Это лёгкий уровень")
+        case .medium:
+            print("Это средний уровень")
+        case .hard:
+            print("Это сложный уровень")
+        }
+    } else {
+        print("Unknown lewel")
+    }
+}
 
+startGame(level: "Easy")
+startGame(level: "Medium")
+startGame(level: "Hard")
 
-// task 3
-
-print("Введите первое число.")
-let firstNumber = Int(readLine()!)!
-
-print("Введите второе число.")
-let secondNumber = Int(readLine()!)!
-
-let sumResult = firstNumber + secondNumber
-let sumFirstandSecondNumber = "Сумма чисел " + String(firstNumber) + " и " + String(secondNumber) + " равна " + String(sumResult) + "."
-print("sumFirstandSecondNumber -> \(sumFirstandSecondNumber)")
-
-
-
-
-// --------------------- string interpolation ---------------
-
-// task_1
-
-let ageTestIntorpolation:UInt8 = 42
-
-let resultMessageInterpolation = "Меня зовут \(firstName), и мне \(age) года."
-print("resultMessageInterpolation -> \(resultMessageInterpolation)")
-
-
-// task_2
-
-print("Введите ваш вес в кг:")
-let weight = Double(readLine()!)!
-
-print("Введите ваш рост в см:")
-let heightCm = Double(readLine()!)!
-
-let heightM = heightCm / 100
-
-let bmi = weight / (heightM * heightM)
-
-print("Ваш ИМТ равен: \(bmi)")
+startGame(level: "Advanced lewel")
 
 
 
 // task_3
 
-let productName:String = "MacBooK Air"
-let price:Int = 54_000
-let quantity:Int = 22
-
-let totalPrice = "Вы добавили в корзину \(quantity) шт. Товара \(productName) на сумму \(price * quantity) руб"
-
-print("totalPrice -> \(totalPrice)")
-
-
-
-// ----------------- main data types ------------
-
-// task_1
-
-var minIntSixTeen:Int16 = -32_768
-var numberUintEight:UInt8 = 200
-var numberDouble:Double = 3.1415926535
-var isBool:Bool = false
-let message:String = "Боятся нужно только Бога"
-
-
-
-// task_2
-
-print("Пользователь, введите целое число?")
-
-let inputNumber = Int(readLine()!)!
-
-let squareNumber = inputNumber * inputNumber
-print("Результат возведения числа в квадрат равен \(squareNumber)")
-
-
-// task_3
-
-let inputNumberTwo = 42
-let isEven:Bool
-
-isEven = inputNumberTwo % 2 == 0
-print("Введённое число является \(isEven) значением.")
-
-
-
-
-// --------------------- variable and constant -------------------------
-
-// task_1
-
-var temperature:Int8 = 7
-temperature = 10
-
-
-// task_2
-
-let birthYear:Int16 = 1983          // Выбрал данный тип так как было время и до нашей эры а более чем 32 века у нас значительный запас
-//birthYear = 1982                  // константа подразумевает объявление присвоенного значения в переменной единожды
-
-
-// task_3
-
-var count = 10
-//count = "Mobile IOS developer"
-
-/*
- Тут произошло следующее: я могу ошибаться но или компилятор
-  или интерпритатор по умолчанию задаст переменной тип при
-  объявлении без явного присвоения типа как type notation
-  а потом я вмешиваюсь и явно пытаюсь изменить не только значение
-  но и сам тип данных и язык это не допустит
- */
-
-
-
-// ---------------------- if/else ------------------
-
-// task_1
-
-let testNumber = 345_123
-
-if testNumber > 0 {
-    print("Число \(testNumber), является положительным")
-} else if testNumber < 0 {
-    print("Число \(testNumber), является отрицательным")
-} else {
-    print("Число \(testNumber), является нулём")
+enum Payment {
+    case cash(Double)
+    case card(number: String, amount: Double)
+    case crypto(wallet: String, amount: Double)
 }
 
 
-
-// task_2
-
-let userAge = 42
-
-if userAge >= 18 {
-    print("Доступ разрешён!")
-} else {
-    print("Доступ запрещён!")
+func process(payment: Payment){
+    switch payment {
+    case .cash(let double):
+        print("У тебя наличными \(double)$ долларов ")
+    case .card(let number, let amount):
+        print("У тебя номер карты \(number), и на ней \(amount)$ долларов ")
+    case .crypto(let wallet, let amount):
+        print("У тебя на цифровом активе \(wallet), капитализация составляет \(amount)$ долларов ")
+    }
 }
+
+process(payment: .cash(100_000))
+process(payment: .card(number: "12345", amount: 150_000))
+process(payment: .crypto(wallet: "холодный кошелёк", amount: 200_000))
+
+
+
+// task_4
+
+enum AppEvent {
+    case login(user: String)
+    case logout(user: String)
+    case error(message: String)
+    case purchase(user: String, amount: Double)
+}
+
+func autentification(input: AppEvent){
+    switch input {
+    case .login(let user):
+        print("Пользователь \(user) вошёл в приложение")
+    case .logout(let user):
+        print("Пользователь \(user) вышел из приложения")
+    case .error(let message):
+        print("Внимание! \(message)")
+    case .purchase(_, let amount) where amount > 1000:
+        print("Big spender")
+    case .purchase(let user, let amount):
+        print("Пользователь \(user), произвёл покупку на сумму \(amount) рублей")
+    }
+}
+
+autentification(input: .login(user: "Джон"))
+autentification(input: .logout(user: "Майкл"))
+autentification(input: .error(message: "Завершило работу экстренно"))
+autentification(input: .purchase(user: "Inna", amount: 999))
+autentification(input: .purchase(user: "Inna", amount: 10_000))
+
+
+// task_5
+
+enum Notification {
+    case message(user: String, text: String)
+    case friendRequest(user: String)
+    case system(message: String)
+}
+
+func handle(notification: Notification){
+    switch notification {
+    case .message(let user, let text):
+        print("Пользователь \(user) введите \(text)")
+    case .friendRequest(let user):
+        print("Пользователю \(user) пришло сообщение")
+    case .system(let message):
+        print("Вам \(message)")
+    }
+}
+
+handle(notification: .message(user: "Ivan", text: "Пароль"))
+handle(notification: .friendRequest(user: "Marina"))
+handle(notification: .system(message: "уведомление"))
+
+
+
+// task_6
+
+enum DownloadResult {
+    case success(filePath: String, size: Int)
+    case failure(error: String)
+}
+
+func downloadFile(complection: DownloadResult){
+    switch complection {
+    case .success(let filePath, let size):
+        print("Путь к файлу \(filePath), и его размер составляет \(size) kb")
+    case .failure(let error):
+        print("\(error) загрузки")
+    }
+}
+
+downloadFile(complection: .success(filePath: "/../../book", size: 3))
+downloadFile(complection: .failure(error: "Ошибка"))
