@@ -1,160 +1,100 @@
-// task_1
+// Struct -> value type
+// Память
 
-enum Diection {
-    case north
-    case south
-    case east
-    case west
+var age: Int
+
+func someFunc(){
+    let _: String = "User"
 }
 
-func move(direction: Diection){
-    switch direction {
-    case .north:
-        print("Go up")
-    case .south:
-        print("Go down")
-    case .east:
-        print("Go right")
-    case .west:
-        print("Go left")
+someFunc()
+
+// struct -> является объектом
+
+struct User {
+    // свойства
+    
+    var name: String
+    var surname: String
+    var age: UInt8
+    var hp: Int
+    
+    // методы
+    
+    func run(speed: Float) {
+        print("User \(name) бежит со скоростью \(speed) км/ч")
     }
-}
-
-move(direction: .north)
-move(direction: .south)
-move(direction: .east)
-move(direction: .west)
-
-
-
-// task_2
-
-enum Gamelevel: String {
-    case easy = "Easy"
-    case medium = "Medium"
-    case hard = "Hard"
-}
-
-func startGame( level: String ){
-    if let gameLwl = Gamelevel(rawValue: level){
-        switch gameLwl {
-        case .easy:
-            print("Это лёгкий уровень")
-        case .medium:
-            print("Это средний уровень")
-        case .hard:
-            print("Это сложный уровень")
+    
+    func fight(damage: Int) {
+        if hp < 90 {
+            print("Удар был вполсилы \(damage / 2)")
+        } else {
+            print("Удар был со всей силы \(damage)")
         }
-    } else {
-        print("Unknown lewel")
+    }
+    
+    func speak(str: String) -> [Character] {
+        var char: [Character] = []
+        for it in str{
+            char.append(it)
+        }
+        return char
+    }
+    
+    func getFullName() -> String {
+        return name + " " + surname
+    }
+    
+    mutating func setNewName(newName: String){
+        self.name = newName
     }
 }
 
-startGame(level: "Easy")
-startGame(level: "Medium")
-startGame(level: "Hard")
+// экземпляр User
+var admin: User = User(name: "Maksim", surname: "Minakov", age: 42, hp: 80)
+print("admin -> \(admin)")
+admin.run(speed: 10)
+admin.fight(damage: 10)
+let fullName =  admin.getFullName()
+print("fullName -> \(fullName)")
+admin.age = 43
+print("admin -> \(admin)")
+admin.setNewName(newName: "Max")
+print(admin)
 
-startGame(level: "Advanced lewel")
+
+// --------
+let manager: User = User(name: "Larisa", surname: "Suslova", age: 39, hp: 100)
+print("manager -> \(manager)")
+manager.run(speed: 11)
+manager.fight(damage: 10)
+let speak = manager.speak(str: "Hello")
+print("speak -> \(speak)")
+let fullNameLarisa = manager.getFullName()
+print("fullNameLarisa -> \(fullNameLarisa)")
 
 
+// -----------
 
-// task_3
+var users: [User] = [admin, manager]
+print("users -> \(users.count)")
 
-enum Payment {
-    case cash(Double)
-    case card(number: String, amount: Double)
-    case crypto(wallet: String, amount: Double)
+for user in users {
+    print(user.getFullName())
 }
 
 
-func process(payment: Payment){
-    switch payment {
-    case .cash(let double):
-        print("У тебя наличными \(double)$ долларов ")
-    case .card(let number, let amount):
-        print("У тебя номер карты \(number), и на ней \(amount)$ долларов ")
-    case .crypto(let wallet, let amount):
-        print("У тебя на цифровом активе \(wallet), капитализация составляет \(amount)$ долларов ")
+
+
+
+func someFunction() {
+    defer {
+        // Этот код выполнится перед выходом из функции
+        print("Выполняем cleanup")
     }
+    
+    // Основной код функции
+    print("Выполняем основную работу")
 }
 
-process(payment: .cash(100_000))
-process(payment: .card(number: "12345", amount: 150_000))
-process(payment: .crypto(wallet: "холодный кошелёк", amount: 200_000))
-
-
-
-// task_4
-
-enum AppEvent {
-    case login(user: String)
-    case logout(user: String)
-    case error(message: String)
-    case purchase(user: String, amount: Double)
-}
-
-func autentification(input: AppEvent){
-    switch input {
-    case .login(let user):
-        print("Пользователь \(user) вошёл в приложение")
-    case .logout(let user):
-        print("Пользователь \(user) вышел из приложения")
-    case .error(let message):
-        print("Внимание! \(message)")
-    case .purchase(_, let amount) where amount > 1000:
-        print("Big spender")
-    case .purchase(let user, let amount):
-        print("Пользователь \(user), произвёл покупку на сумму \(amount) рублей")
-    }
-}
-
-autentification(input: .login(user: "Джон"))
-autentification(input: .logout(user: "Майкл"))
-autentification(input: .error(message: "Завершило работу экстренно"))
-autentification(input: .purchase(user: "Inna", amount: 999))
-autentification(input: .purchase(user: "Inna", amount: 10_000))
-
-
-// task_5
-
-enum Notification {
-    case message(user: String, text: String)
-    case friendRequest(user: String)
-    case system(message: String)
-}
-
-func handle(notification: Notification){
-    switch notification {
-    case .message(let user, let text):
-        print("Пользователь \(user) введите \(text)")
-    case .friendRequest(let user):
-        print("Пользователю \(user) пришло сообщение")
-    case .system(let message):
-        print("Вам \(message)")
-    }
-}
-
-handle(notification: .message(user: "Ivan", text: "Пароль"))
-handle(notification: .friendRequest(user: "Marina"))
-handle(notification: .system(message: "уведомление"))
-
-
-
-// task_6
-
-enum DownloadResult {
-    case success(filePath: String, size: Int)
-    case failure(error: String)
-}
-
-func downloadFile(complection: DownloadResult){
-    switch complection {
-    case .success(let filePath, let size):
-        print("Путь к файлу \(filePath), и его размер составляет \(size) kb")
-    case .failure(let error):
-        print("\(error) загрузки")
-    }
-}
-
-downloadFile(complection: .success(filePath: "/../../book", size: 3))
-downloadFile(complection: .failure(error: "Ошибка"))
+someFunction()
