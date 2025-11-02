@@ -1,195 +1,170 @@
-import Foundation
+// -------------------------------------- Вычисляемые свойства -----------------------------------------------------
+
+// task_1
+
+struct Temperature {
+    var celsius: Int
+    var fahrenheit: Int {
+        get {
+            (celsius * 9 / 5 ) + 32
+        }
+    }
+}
+
+let temperaturaFahrenheit: Temperature = Temperature(celsius: 20)
+print("Если температура \(temperaturaFahrenheit.celsius) градусов Цельсия, то в Фаренгейтах: \(temperaturaFahrenheit.fahrenheit) градусов")
 
 
+// task_2
 
-struct User {
+struct Rectangle {
+    var width: Int
+    var height: Int
+    
+    var perimeter: Int {
+        get {
+            2 * (width + height)
+        }
+    }
+}
+
+let rectangle: Rectangle = Rectangle(width: 5, height: 3)
+print("Периметр прямоугольника: \(rectangle.perimeter)")
+
+
+// task_3
+
+
+struct BancAccount {
+    var balance: Double
+    
+    var formattedBalance: String {
+        get {
+            return String("Ваш балланс: \(balance)")
+        }
+    }
+    
+    var isOverdrawn: Bool {
+        get {
+            return balance < 0
+        }
+    }
+}
+
+// v1
+let money: BancAccount = BancAccount(balance: 1000)
+print(money.formattedBalance)
+print(money.isOverdrawn)
+
+// v2
+let moneyDecrement: BancAccount = BancAccount(balance: -1)
+print(moneyDecrement.formattedBalance)
+print(moneyDecrement.isOverdrawn)
+
+
+// task_4
+
+struct CartItem {
     var name: String
-    var surname: String
-}
-
-var userIvan: User = User(name: "Ivan", surname: "Ivanov")
-var userPetr = userIvan
-//userIvan.name = "Petr"
-//userPetr.name = "Petr"
-
-print("userIvan -> \(userIvan)")
-print("userPetr -> \(userPetr)")
-
-
-// Вычисляемые значения
-
-
-struct User2 {
-    let firstName: String
-    let lastName: String
-    let birthDate: Date
+    var pricePerItem: Double
+    var quantity: Int
     
     
-    var fullName: String {
+    var totalPrice: Double {
         get {
-            firstName + " " + lastName
-        }
-        set {
-            print("set value \(newValue)")
-        }
-    }
-    
-    // Вычисляемые значения
-    var age: Int {
-        get {
-            Calendar.current.dateComponents([.year], from: birthDate, to: .now).year ?? 0
-        }
-        set {
-            print("Сработал установщик даты set -> \(newValue)")
+            return pricePerItem * Double(quantity)
         }
     }
 }
 
-let correctBirthDate: Date = {
-    var components = DateComponents()
-    components.year = 1983
-    components.month = 8
-    components.day = 26
-    return Calendar.current.date(from: components)!
-}()
+let product: CartItem = CartItem(name: "coffee", pricePerItem: 450.99, quantity: 4)
+print("Цена за упаковку кофе составила: \(product.totalPrice) рублей")
 
 
-var user: User2 = User2(firstName: "Maksim", lastName: "Minakov", birthDate: correctBirthDate)
-print("user -> \(user)")
 
-print(user.fullName)
+// --------------------------------------- Наблюдатели свойств -------------------------------------------------------------
 
-print(user.age)
+// task_1
 
-user.fullName = "Petr Petrov"
-
-user.age = 30
-print(user.age)
-
-
-// ------------------------
-
-struct Database {
-    var login: String
-    var isRoot: Bool
-    
-    var isRootUser: Bool {
-        get {
-            isRoot
+struct Post {
+    var likes: Int {
+        didSet {
+            print("Лайков стало \(likes) после каждого изменения")
         }
-        set {
-            if newValue {
-                if login == "admin", newValue {
-                    isRoot = true
-                } else {
-                    isRoot = false
-                }
+    }
+}
+
+var likeCounter: Post = Post(likes: 1)
+likeCounter.likes += 1
+likeCounter.likes *= 2
+likeCounter.likes *= 3
+likeCounter.likes *= 4
+likeCounter.likes *= 5
+
+
+// task_2
+
+
+struct StepTracker {
+    var steeps: Int {
+        didSet {
+            if steeps >= 10_000 {
+                print("цель достигнута")
+            } else {
+                print("Сегодня пройдено \(steeps) шагов")
             }
         }
     }
 }
 
-var db: Database = Database(login: "admin", isRoot: true)
-db.isRootUser = true
-
-print("db.isRoot -> \(db.isRoot)")
-
+// мы недошли ))
+var steepsMan: StepTracker = StepTracker(steeps: 0)
+steepsMan.steeps = 1000
 
 
-struct TodoItem {
-    let title: String
-    let isCompleted: Bool
-    
-    var textColor: String {
-        if isCompleted {
-            return "Gray"
-        } else {
-            return "Black"
+// мы дошли ))
+var steepsManForever: StepTracker = StepTracker(steeps: 0)
+steepsMan.steeps = 10_0001
+
+
+// task_3
+
+struct Wallet {
+    var money: Double {
+        didSet {
+            if money < 0 {
+                print("У вас долг")
+            } else if money > oldValue {
+                print("Поступление: \(money - oldValue)")
+            } else if money < oldValue {
+                print("Трата: \(oldValue - money)")
+            }
         }
     }
 }
 
-var task = TodoItem(title: "New Book", isCompleted: true)
-print(task.textColor)
+var currentMoney: Wallet = Wallet(money: 0)
+currentMoney.money = 100
+currentMoney.money = 150
+currentMoney.money = 80
 
 
-// - ----------------- Наблюдатели свойств ----------------
+// task_4
 
-struct LoginForm {
-    var email: String = "" {
-        
+struct UserAccount {
+    var password: String {
         willSet {
-            print("Сейчас будет установлено значение \(newValue)")
+            if newValue.count < 6 {
+                print("Пароль слишком короткий")
+            }
         }
-        
         didSet {
-            print("Старое значение \(oldValue)")
-            if !email.contains("@") {
-                print("Некоректное значение email: \(email)")
-                isError = true
+            if !password.isEmpty {
+                print("Пароль обновлен")
             }
         }
     }
-    var isError: Bool = false
 }
 
-var form: LoginForm = LoginForm()
-form.email = "sdsd"
-form.email = "maksim.minakov.83@mail.ru"
-
-
-
-
-// 1.
-
-struct Product {
-    let price: Double
-    let discont: Int
-    
-    var priceWithDiscont: Double {
-        price * Double(100 - discont) / 100
-    }
-}
-
-let res = Product(price: 453, discont: 67)
-print(res.priceWithDiscont)
-
-
-
-// 2.
-
-struct Cart {
-    var items: [String] = [] {
-        didSet {
-            totalCount = items.count
-            print(totalCount)
-        }
-    }
-    var totalCount: Int = 0
-    
-    static func doSome() -> Cart {
-        Cart(items: ["1", "2", "3"])
-    }
-}
-
-var count: Cart = Cart()
-count.items = ["0", "1", "2"]
-
-
-// 3. static
-
-var cart: Cart = Cart()
-print(cart)
-
-print(Cart.doSome())
-
-
-// extension
-
-extension String {
-    static let helloText = "Hello"
-    static let appName = "Super app"
-}
-
-print(String.helloText)
-print(String.appName)
+var password: UserAccount = UserAccount(password: "123")
+password.password = "qwerty"
