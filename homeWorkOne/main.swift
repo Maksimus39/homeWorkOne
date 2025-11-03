@@ -1,170 +1,157 @@
-// -------------------------------------- Вычисляемые свойства -----------------------------------------------------
-
-// task_1
-
-struct Temperature {
-    var celsius: Int
-    var fahrenheit: Int {
-        get {
-            (celsius * 9 / 5 ) + 32
-        }
+class Netvork {
+    var url: String
+    
+    func sendRequest() -> String {
+        return "Data"
+    }
+    
+    init(startUrl: String) {
+        self.url = startUrl
     }
 }
 
-let temperaturaFahrenheit: Temperature = Temperature(celsius: 20)
-print("Если температура \(temperaturaFahrenheit.celsius) градусов Цельсия, то в Фаренгейтах: \(temperaturaFahrenheit.fahrenheit) градусов")
+
+let classNetwork = Netvork(startUrl: "www.google.com")
+
+let newNetwork = classNetwork
+newNetwork.url = "apple.com"
+
+print("newNetwork.url -> \(newNetwork.url)")
+print("classNetwork.url -> \(classNetwork.url)")
 
 
-// task_2
-
-struct Rectangle {
-    var width: Int
-    var height: Int
-    
-    var perimeter: Int {
-        get {
-            2 * (width + height)
-        }
-    }
-}
-
-let rectangle: Rectangle = Rectangle(width: 5, height: 3)
-print("Периметр прямоугольника: \(rectangle.perimeter)")
 
 
-// task_3
+// ------------------------------------
 
-
-struct BancAccount {
-    var balance: Double
-    
-    var formattedBalance: String {
-        get {
-            return String("Ваш балланс: \(balance)")
-        }
-    }
-    
-    var isOverdrawn: Bool {
-        get {
-            return balance < 0
-        }
-    }
-}
-
-// v1
-let money: BancAccount = BancAccount(balance: 1000)
-print(money.formattedBalance)
-print(money.isOverdrawn)
-
-// v2
-let moneyDecrement: BancAccount = BancAccount(balance: -1)
-print(moneyDecrement.formattedBalance)
-print(moneyDecrement.isOverdrawn)
-
-
-// task_4
-
-struct CartItem {
+class LoginManager {
     var name: String
-    var pricePerItem: Double
-    var quantity: Int
+    var password: String
+    var email: String
+    
+    init(name: String, password: String, email: String) {
+        self.name = name
+        self.password = password
+        self.email = email
+    }
     
     
-    var totalPrice: Double {
-        get {
-            return pricePerItem * Double(quantity)
+    func registration(){
+        //
+    }
+    
+    func login(email: String, pswd: String) -> Bool {
+        email == self.email && pswd == self.password
+    }
+}
+
+class RegView {
+    var loginManager = LoginManager(name: "1", password: "2", email: "3")
+    
+    
+    func navToLogin(){
+        _ = LoginView(loginManager: loginManager)
+    }
+}
+
+class LoginView {
+    var loginManager: LoginManager
+    
+    init(loginManager: LoginManager) {
+        self.loginManager = loginManager
+    }
+    
+    func checkLogin(email: String, pswd: String){
+        print(loginManager.login(email: email, pswd: pswd))
+    }
+}
+
+// -----------------------------------
+
+enum TextFieldType {
+    case normal, custom, fill
+}
+
+class UITextField {
+    var text: String?
+    var type: TextFieldType
+    
+    init(text: String?, type: TextFieldType) {
+        self.text = text
+        self.type = type
+    }
+    
+    init(type: TextFieldType){
+        self.type = type
+    }
+    
+    func setupTextField(){
+        switch type {
+        case .normal:
+            print("normall")
+        case .custom:
+            print("custom")
+        case .fill:
+            print("fill")
         }
     }
 }
 
-let product: CartItem = CartItem(name: "coffee", pricePerItem: 450.99, quantity: 4)
-print("Цена за упаковку кофе составила: \(product.totalPrice) рублей")
+var textField = UITextField(type: .normal)
+print("textField.type -> \(textField.type)")
 
 
+// 1 - ссылочный тип - экземпляры не копируются а передаются по ссылке
+// 2 - обязательный инит
+// 3 - можем наследовать классы
 
-// --------------------------------------- Наблюдатели свойств -------------------------------------------------------------
+import Foundation
 
-// task_1
-
-struct Post {
-    var likes: Int {
-        didSet {
-            print("Лайков стало \(likes) после каждого изменения")
-        }
+class Session {
+    var id: String
+    var date: Date
+    
+    init(id: String, date: Date) {
+        self.id = id
+        self.date = date
+    }
+    
+    func start(){
+        print("start session \(date)")
+    }
+    
+    func stop(){
+        print("stop session \(date)")
     }
 }
 
-var likeCounter: Post = Post(likes: 1)
-likeCounter.likes += 1
-likeCounter.likes *= 2
-likeCounter.likes *= 3
-likeCounter.likes *= 4
-likeCounter.likes *= 5
+var mainSession = Session(id: "123", date: Date())
+mainSession.start()
+mainSession.stop()
 
 
-// task_2
-
-
-struct StepTracker {
-    var steeps: Int {
-        didSet {
-            if steeps >= 10_000 {
-                print("цель достигнута")
-            } else {
-                print("Сегодня пройдено \(steeps) шагов")
-            }
-        }
+final class CustomSession: Session {
+    
+    var pauseDate: Date
+    
+    init(pauseDate: Date, id: String, date: Date) {
+        // 1. сначала проинициализировать свойства дочернего а потом родителя
+        self.pauseDate = pauseDate
+        
+        // 2. вызови init родителя (id: String, date: Date)
+        super.init(id: id, date: date)
+    }
+    
+    override  func start(){            // переопределение функции в дочернем классе с помощью ключевого слова ovveride
+        print("start session override \(date)")
+    }
+    
+    func pause() {
+        print("pause")
     }
 }
 
-// мы недошли ))
-var steepsMan: StepTracker = StepTracker(steeps: 0)
-steepsMan.steeps = 1000
-
-
-// мы дошли ))
-var steepsManForever: StepTracker = StepTracker(steeps: 0)
-steepsMan.steeps = 10_0001
-
-
-// task_3
-
-struct Wallet {
-    var money: Double {
-        didSet {
-            if money < 0 {
-                print("У вас долг")
-            } else if money > oldValue {
-                print("Поступление: \(money - oldValue)")
-            } else if money < oldValue {
-                print("Трата: \(oldValue - money)")
-            }
-        }
-    }
-}
-
-var currentMoney: Wallet = Wallet(money: 0)
-currentMoney.money = 100
-currentMoney.money = 150
-currentMoney.money = 80
-
-
-// task_4
-
-struct UserAccount {
-    var password: String {
-        willSet {
-            if newValue.count < 6 {
-                print("Пароль слишком короткий")
-            }
-        }
-        didSet {
-            if !password.isEmpty {
-                print("Пароль обновлен")
-            }
-        }
-    }
-}
-
-var password: UserAccount = UserAccount(password: "123")
-password.password = "qwerty"
+let customSession = CustomSession(pauseDate: Date(), id: "123", date: Date())
+customSession.start()
+customSession.stop()
+customSession.pause()
