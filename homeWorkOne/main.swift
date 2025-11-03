@@ -1,160 +1,170 @@
-// ------------------ Concatenation --------------
+// -------------------------------------- Вычисляемые свойства -----------------------------------------------------
 
 // task_1
 
-let firstName:String = "Максим"
-let lastName:String = "Минаков"
-let fullName:String = firstName + " " + lastName
-
-print("fullName -> \(fullName)")
-
-
-
-// task_2
-
-let age:UInt8 = 42
-
-let resultMessage = "Меня зовут " + firstName + ", и мне " + String(age) + " года."
-print("resultMessage -> \(resultMessage)")
-
-
-// task 3
-
-print("Введите первое число.")
-let firstNumber = Int(readLine()!)!
-
-print("Введите второе число.")
-let secondNumber = Int(readLine()!)!
-
-let sumResult = firstNumber + secondNumber
-let sumFirstandSecondNumber = "Сумма чисел " + String(firstNumber) + " и " + String(secondNumber) + " равна " + String(sumResult) + "."
-print("sumFirstandSecondNumber -> \(sumFirstandSecondNumber)")
-
-
-
-
-// --------------------- string interpolation ---------------
-
-// task_1
-
-let ageTestIntorpolation:UInt8 = 42
-
-let resultMessageInterpolation = "Меня зовут \(firstName), и мне \(age) года."
-print("resultMessageInterpolation -> \(resultMessageInterpolation)")
-
-
-// task_2
-
-print("Введите ваш вес в кг:")
-let weight = Double(readLine()!)!
-
-print("Введите ваш рост в см:")
-let heightCm = Double(readLine()!)!
-
-let heightM = heightCm / 100
-
-let bmi = weight / (heightM * heightM)
-
-print("Ваш ИМТ равен: \(bmi)")
-
-
-
-// task_3
-
-let productName:String = "MacBooK Air"
-let price:Int = 54_000
-let quantity:Int = 22
-
-let totalPrice = "Вы добавили в корзину \(quantity) шт. Товара \(productName) на сумму \(price * quantity) руб"
-
-print("totalPrice -> \(totalPrice)")
-
-
-
-// ----------------- main data types ------------
-
-// task_1
-
-var minIntSixTeen:Int16 = -32_768
-var numberUintEight:UInt8 = 200
-var numberDouble:Double = 3.1415926535
-var isBool:Bool = false
-let message:String = "Боятся нужно только Бога"
-
-
-
-// task_2
-
-print("Пользователь, введите целое число?")
-
-let inputNumber = Int(readLine()!)!
-
-let squareNumber = inputNumber * inputNumber
-print("Результат возведения числа в квадрат равен \(squareNumber)")
-
-
-// task_3
-
-let inputNumberTwo = 42
-let isEven:Bool
-
-isEven = inputNumberTwo % 2 == 0
-print("Введённое число является \(isEven) значением.")
-
-
-
-
-// --------------------- variable and constant -------------------------
-
-// task_1
-
-var temperature:Int8 = 7
-temperature = 10
-
-
-// task_2
-
-let birthYear:Int16 = 1983          // Выбрал данный тип так как было время и до нашей эры а более чем 32 века у нас значительный запас
-//birthYear = 1982                  // константа подразумевает объявление присвоенного значения в переменной единожды
-
-
-// task_3
-
-var count = 10
-//count = "Mobile IOS developer"
-
-/*
- Тут произошло следующее: я могу ошибаться но или компилятор
-  или интерпритатор по умолчанию задаст переменной тип при
-  объявлении без явного присвоения типа как type notation
-  а потом я вмешиваюсь и явно пытаюсь изменить не только значение
-  но и сам тип данных и язык это не допустит
- */
-
-
-
-// ---------------------- if/else ------------------
-
-// task_1
-
-let testNumber = 345_123
-
-if testNumber > 0 {
-    print("Число \(testNumber), является положительным")
-} else if testNumber < 0 {
-    print("Число \(testNumber), является отрицательным")
-} else {
-    print("Число \(testNumber), является нулём")
+struct Temperature {
+    var celsius: Int
+    var fahrenheit: Int {
+        get {
+            (celsius * 9 / 5 ) + 32
+        }
+    }
 }
 
+let temperaturaFahrenheit: Temperature = Temperature(celsius: 20)
+print("Если температура \(temperaturaFahrenheit.celsius) градусов Цельсия, то в Фаренгейтах: \(temperaturaFahrenheit.fahrenheit) градусов")
 
 
 // task_2
 
-let userAge = 42
-
-if userAge >= 18 {
-    print("Доступ разрешён!")
-} else {
-    print("Доступ запрещён!")
+struct Rectangle {
+    var width: Int
+    var height: Int
+    
+    var perimeter: Int {
+        get {
+            2 * (width + height)
+        }
+    }
 }
+
+let rectangle: Rectangle = Rectangle(width: 5, height: 3)
+print("Периметр прямоугольника: \(rectangle.perimeter)")
+
+
+// task_3
+
+
+struct BancAccount {
+    var balance: Double
+    
+    var formattedBalance: String {
+        get {
+            return String("Ваш балланс: \(balance)")
+        }
+    }
+    
+    var isOverdrawn: Bool {
+        get {
+            return balance < 0
+        }
+    }
+}
+
+// v1
+let money: BancAccount = BancAccount(balance: 1000)
+print(money.formattedBalance)
+print(money.isOverdrawn)
+
+// v2
+let moneyDecrement: BancAccount = BancAccount(balance: -1)
+print(moneyDecrement.formattedBalance)
+print(moneyDecrement.isOverdrawn)
+
+
+// task_4
+
+struct CartItem {
+    var name: String
+    var pricePerItem: Double
+    var quantity: Int
+    
+    
+    var totalPrice: Double {
+        get {
+            return pricePerItem * Double(quantity)
+        }
+    }
+}
+
+let product: CartItem = CartItem(name: "coffee", pricePerItem: 450.99, quantity: 4)
+print("Цена за упаковку кофе составила: \(product.totalPrice) рублей")
+
+
+
+// --------------------------------------- Наблюдатели свойств -------------------------------------------------------------
+
+// task_1
+
+struct Post {
+    var likes: Int {
+        didSet {
+            print("Лайков стало \(likes) после каждого изменения")
+        }
+    }
+}
+
+var likeCounter: Post = Post(likes: 1)
+likeCounter.likes += 1
+likeCounter.likes *= 2
+likeCounter.likes *= 3
+likeCounter.likes *= 4
+likeCounter.likes *= 5
+
+
+// task_2
+
+
+struct StepTracker {
+    var steeps: Int {
+        didSet {
+            if steeps >= 10_000 {
+                print("цель достигнута")
+            } else {
+                print("Сегодня пройдено \(steeps) шагов")
+            }
+        }
+    }
+}
+
+// мы недошли ))
+var steepsMan: StepTracker = StepTracker(steeps: 0)
+steepsMan.steeps = 1000
+
+
+// мы дошли ))
+var steepsManForever: StepTracker = StepTracker(steeps: 0)
+steepsMan.steeps = 10_0001
+
+
+// task_3
+
+struct Wallet {
+    var money: Double {
+        didSet {
+            if money < 0 {
+                print("У вас долг")
+            } else if money > oldValue {
+                print("Поступление: \(money - oldValue)")
+            } else if money < oldValue {
+                print("Трата: \(oldValue - money)")
+            }
+        }
+    }
+}
+
+var currentMoney: Wallet = Wallet(money: 0)
+currentMoney.money = 100
+currentMoney.money = 150
+currentMoney.money = 80
+
+
+// task_4
+
+struct UserAccount {
+    var password: String {
+        willSet {
+            if newValue.count < 6 {
+                print("Пароль слишком короткий")
+            }
+        }
+        didSet {
+            if !password.isEmpty {
+                print("Пароль обновлен")
+            }
+        }
+    }
+}
+
+var password: UserAccount = UserAccount(password: "123")
+password.password = "qwerty"
