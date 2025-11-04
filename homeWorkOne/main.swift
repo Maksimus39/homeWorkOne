@@ -1,173 +1,167 @@
-// task_1
+import Foundation
 
-class Person {
-    var name: String
-    var age: Int
-    
-    init(name: String, age: Int) {
-        self.name = name
-        self.age = age
-    }
-    
-    func sayHello(){
-        print("Привет, меня зовут \(name)")
-    }
-    
-    
-    // task_3
-    func celebrateBirthday() {
-        age += 1
-        print("С днем рождения, \(name)! Теперь у меня \(age) лет.")
-    }
-}
-
-// person - 1
-let personIvan: Person = Person(name: "Ivan", age: 20)
-personIvan.sayHello()
-
-// person - 2
-let personPetr: Person = Person(name: "Petr", age: 25)
-personPetr.sayHello()
-
-// person - 3
-let personOleg: Person = Person(name: "Oleg", age: 30)
-personOleg.sayHello()
-
-
-// task_2
-
-class Car {
-    var model: String
-    var owner: Person?
-    
-    init(model: String, owner: Person? = nil) {
-        self.model = model
-        self.owner = owner
-    }
-    
-    func assignOwner(_ newOwner: Person) {
-        self.owner = newOwner
-        print("Новый хозяин автомобиля \(model) - \(newOwner.name)")
-    }
-}
-
-// первый владелец - тут создан автомобиль и позже присвоен владелец
-let toyota = Car(model: "Toyota")
-toyota.assignOwner(personIvan)
-
-
-// второй владелец сразу присвоен экземпляру автомобиль и владелец и машина
-let bmw = Car(model: "BMW", owner: personPetr)
-bmw.assignOwner(personPetr)
-
-
-// ---- task_3 --- этот метод celebrateBirthday я реализовал в классе Person т.к т.з мне было не совсем ясно
-// и я его реализовал в классе Person без реализации наследования в класс Car, хотя если подумать по
-// названию то этот метод по логике там и не нужен ведь класс отвечает за реализацию автомобиля, наверно так
-
-personIvan.celebrateBirthday()
-personPetr.celebrateBirthday()
-personOleg.celebrateBirthday()
-
-
-
-// task_4
-
-class Animal {
-    var name: String
-    
-    init(name: String) {
-        self.name = name
-    }
-    
-    func makeSound() {}
-}
-
-class Dog: Animal {
-    // task_5
-    var breed: String?
-    
-    init(name: String, breed: String? = nil){
-        self.breed = breed
-        super.init(name: name)
-    }
-    
-    override func makeSound() {
-        print("Собака \(name) умеет лаить")
-    }
-}
-
-class Cat: Animal {
-    
-    override func makeSound() {
-        print("Кот \(name) умеет мяукать")
-    }
-}
-
-
-let myDog = Dog(name: "Rex")
-let myCat = Cat(name: "Murzic")
-myDog.makeSound()
-myCat.makeSound()
-
-
-// task_5
-
-let dogGermanShepherd: Dog = Dog(name: "Red", breed: "German Shepherd")
-let dogPoodle: Dog = Dog(name: "Марсель", breed: "Poodle")
-
-
-// task_6
 
 class Product {
     var name: String
     var price: Double
+    var isAvailable: Bool
     
-    init(name: String, price: Double) {
+    init(name: String, price: Double, isAvailable: Bool) {
         self.name = name
         self.price = price
+        self.isAvailable = isAvailable
     }
 }
 
-class Store {
-    var products: [Product] = []
-    
-    init(products: [Product]) {
-        self.products = products
+
+var product = Product(name: "zxc", price: 10, isAvailable: true)
+
+
+print(product.name)
+
+
+var person: Product? = Product(name: "asd", price: 3, isAvailable: true)
+
+if let person {
+    print(person.name)
+}
+
+// ------------------------ extension ---------------------------------
+
+extension Product {
+    var description: String{
+        return "\(name), \(price)"
     }
     
-    func printCatalog() {
-        for (index, product) in products.enumerated(){
-            print("\(index + 1). \(product.name) - \(product.price) руб")
-        }
-    }
-    
-    func cell(productName: Product){
-        for i in 0..<products.count {
-            if products[i].name == productName.name {
-                    let removedProduct = products.remove(at: i)
-                    print("Товар \(removedProduct.name) удален из корзины")
-                    return
-                }
-            }
-        print("Товар \(productName.name) не найден в корзине")
+    func getPrice() -> Double {
+        return price * 13
     }
 }
 
-// create product
-let milk = Product(name: "milk", price: 90)
-let bread = Product(name: "bread", price: 50)
-let eggs = Product(name: "eggs", price: 89.90)
+var res = product.description
+var res2 = product.getPrice()
 
-// add store product
-let store = Store(products: [milk, bread, eggs])
+print("res -> \(res)")
+print("res2 -> \(res2)")
 
-// print product price and index
-store.printCatalog()
 
-// remove product
-store.cell(productName: milk)
-store.cell(productName: milk)
+extension Product {
+    // MARK: - в extension нельзя ставить свойства var let но можно вычисляемые get set
+    
+    // var count: Number
+    
+    
+    
+    // MARK: second parth
+    func getPrice2() -> Double {
+        return price * 3.0
+    }
+}
 
-// final store
-store.printCatalog()
+var priceProduct = product.getPrice2()
+
+print("priceProduct -> \(priceProduct)")
+
+
+// extension type
+
+func sqrt(number: Int) -> Int {
+    number * number
+}
+
+
+extension Int {
+    func sqrt() -> Int {
+        self * self
+    }
+    
+    func random() -> Int {
+        return Int.random(in: self...100)
+    }
+    
+    func isOddValue() -> Bool {
+        return self % 2 == 0
+    }
+}
+
+var res10 = 10.sqrt()
+print("res10 -> \(res10)")
+
+var res1 = 1.random()
+print("res1 -> \(res1)")
+
+
+var res6 = 6.isOddValue()
+print("res6 -> \(res6)")
+
+
+
+// protocol -> SOLID вечером посмотреть и попробовать понять
+
+
+protocol NetworkProtocol {
+    // svoystvo
+    var url: String { get set }
+    
+    
+    // method
+    func sendRequest() -> String
+    func getData() -> String
+}
+
+// под protocol подпишутся class struct enum
+
+class Network: NetworkProtocol {
+    var url: String = ""
+    
+    func sendRequest() -> String {
+        "sendRequest"
+    }
+    
+    func getData() -> String {
+        "getData"
+    }
+}
+
+var sendRequest = Network()
+
+print(sendRequest.sendRequest())
+print(sendRequest.getData())
+
+
+class MockServer: NetworkProtocol {
+    var url: String = ""
+    
+    func sendRequest() -> String {
+        "sendRequest mock"
+    }
+    
+    func getData() -> String {
+        "getData mock"
+    }
+}
+
+var netWork = Network()
+var mockServer = MockServer()
+netWork.url = " -> www.google.com <- "
+
+print(netWork.url)
+print(netWork.getData() == mockServer.getData())
+print(netWork.sendRequest() == mockServer.sendRequest())
+
+
+class ViewModel {
+    var service: NetworkProtocol
+    
+    init(service: NetworkProtocol) {
+        self.service = service
+    }
+    
+    func load() -> String {
+        service.getData()
+    }
+}
+
+var viewModel = ViewModel(service: MockServer())
+print(viewModel.load())
+
