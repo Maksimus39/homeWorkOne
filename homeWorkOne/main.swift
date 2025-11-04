@@ -1,160 +1,173 @@
-// ------------------ Concatenation --------------
-
 // task_1
 
-let firstName:String = "Максим"
-let lastName:String = "Минаков"
-let fullName:String = firstName + " " + lastName
+class Person {
+    var name: String
+    var age: Int
+    
+    init(name: String, age: Int) {
+        self.name = name
+        self.age = age
+    }
+    
+    func sayHello(){
+        print("Привет, меня зовут \(name)")
+    }
+    
+    
+    // task_3
+    func celebrateBirthday() {
+        age += 1
+        print("С днем рождения, \(name)! Теперь у меня \(age) лет.")
+    }
+}
 
-print("fullName -> \(fullName)")
+// person - 1
+let personIvan: Person = Person(name: "Ivan", age: 20)
+personIvan.sayHello()
 
+// person - 2
+let personPetr: Person = Person(name: "Petr", age: 25)
+personPetr.sayHello()
+
+// person - 3
+let personOleg: Person = Person(name: "Oleg", age: 30)
+personOleg.sayHello()
 
 
 // task_2
 
-let age:UInt8 = 42
+class Car {
+    var model: String
+    var owner: Person?
+    
+    init(model: String, owner: Person? = nil) {
+        self.model = model
+        self.owner = owner
+    }
+    
+    func assignOwner(_ newOwner: Person) {
+        self.owner = newOwner
+        print("Новый хозяин автомобиля \(model) - \(newOwner.name)")
+    }
+}
 
-let resultMessage = "Меня зовут " + firstName + ", и мне " + String(age) + " года."
-print("resultMessage -> \(resultMessage)")
-
-
-// task 3
-
-print("Введите первое число.")
-let firstNumber = Int(readLine()!)!
-
-print("Введите второе число.")
-let secondNumber = Int(readLine()!)!
-
-let sumResult = firstNumber + secondNumber
-let sumFirstandSecondNumber = "Сумма чисел " + String(firstNumber) + " и " + String(secondNumber) + " равна " + String(sumResult) + "."
-print("sumFirstandSecondNumber -> \(sumFirstandSecondNumber)")
-
-
-
-
-// --------------------- string interpolation ---------------
-
-// task_1
-
-let ageTestIntorpolation:UInt8 = 42
-
-let resultMessageInterpolation = "Меня зовут \(firstName), и мне \(age) года."
-print("resultMessageInterpolation -> \(resultMessageInterpolation)")
+// первый владелец - тут создан автомобиль и позже присвоен владелец
+let toyota = Car(model: "Toyota")
+toyota.assignOwner(personIvan)
 
 
-// task_2
+// второй владелец сразу присвоен экземпляру автомобиль и владелец и машина
+let bmw = Car(model: "BMW", owner: personPetr)
+bmw.assignOwner(personPetr)
 
-print("Введите ваш вес в кг:")
-let weight = Double(readLine()!)!
 
-print("Введите ваш рост в см:")
-let heightCm = Double(readLine()!)!
+// ---- task_3 --- этот метод celebrateBirthday я реализовал в классе Person т.к т.з мне было не совсем ясно
+// и я его реализовал в классе Person без реализации наследования в класс Car, хотя если подумать по
+// названию то этот метод по логике там и не нужен ведь класс отвечает за реализацию автомобиля, наверно так
 
-let heightM = heightCm / 100
-
-let bmi = weight / (heightM * heightM)
-
-print("Ваш ИМТ равен: \(bmi)")
+personIvan.celebrateBirthday()
+personPetr.celebrateBirthday()
+personOleg.celebrateBirthday()
 
 
 
-// task_3
+// task_4
 
-let productName:String = "MacBooK Air"
-let price:Int = 54_000
-let quantity:Int = 22
+class Animal {
+    var name: String
+    
+    init(name: String) {
+        self.name = name
+    }
+    
+    func makeSound() {}
+}
 
-let totalPrice = "Вы добавили в корзину \(quantity) шт. Товара \(productName) на сумму \(price * quantity) руб"
+class Dog: Animal {
+    // task_5
+    var breed: String?
+    
+    init(name: String, breed: String? = nil){
+        self.breed = breed
+        super.init(name: name)
+    }
+    
+    override func makeSound() {
+        print("Собака \(name) умеет лаить")
+    }
+}
 
-print("totalPrice -> \(totalPrice)")
-
-
-
-// ----------------- main data types ------------
-
-// task_1
-
-var minIntSixTeen:Int16 = -32_768
-var numberUintEight:UInt8 = 200
-var numberDouble:Double = 3.1415926535
-var isBool:Bool = false
-let message:String = "Боятся нужно только Бога"
-
-
-
-// task_2
-
-print("Пользователь, введите целое число?")
-
-let inputNumber = Int(readLine()!)!
-
-let squareNumber = inputNumber * inputNumber
-print("Результат возведения числа в квадрат равен \(squareNumber)")
-
-
-// task_3
-
-let inputNumberTwo = 42
-let isEven:Bool
-
-isEven = inputNumberTwo % 2 == 0
-print("Введённое число является \(isEven) значением.")
-
-
-
-
-// --------------------- variable and constant -------------------------
-
-// task_1
-
-var temperature:Int8 = 7
-temperature = 10
-
-
-// task_2
-
-let birthYear:Int16 = 1983          // Выбрал данный тип так как было время и до нашей эры а более чем 32 века у нас значительный запас
-//birthYear = 1982                  // константа подразумевает объявление присвоенного значения в переменной единожды
-
-
-// task_3
-
-var count = 10
-//count = "Mobile IOS developer"
-
-/*
- Тут произошло следующее: я могу ошибаться но или компилятор
-  или интерпритатор по умолчанию задаст переменной тип при
-  объявлении без явного присвоения типа как type notation
-  а потом я вмешиваюсь и явно пытаюсь изменить не только значение
-  но и сам тип данных и язык это не допустит
- */
-
-
-
-// ---------------------- if/else ------------------
-
-// task_1
-
-let testNumber = 345_123
-
-if testNumber > 0 {
-    print("Число \(testNumber), является положительным")
-} else if testNumber < 0 {
-    print("Число \(testNumber), является отрицательным")
-} else {
-    print("Число \(testNumber), является нулём")
+class Cat: Animal {
+    
+    override func makeSound() {
+        print("Кот \(name) умеет мяукать")
+    }
 }
 
 
+let myDog = Dog(name: "Rex")
+let myCat = Cat(name: "Murzic")
+myDog.makeSound()
+myCat.makeSound()
 
-// task_2
 
-let userAge = 42
+// task_5
 
-if userAge >= 18 {
-    print("Доступ разрешён!")
-} else {
-    print("Доступ запрещён!")
+let dogGermanShepherd: Dog = Dog(name: "Red", breed: "German Shepherd")
+let dogPoodle: Dog = Dog(name: "Марсель", breed: "Poodle")
+
+
+// task_6
+
+class Product {
+    var name: String
+    var price: Double
+    
+    init(name: String, price: Double) {
+        self.name = name
+        self.price = price
+    }
 }
+
+class Store {
+    var products: [Product] = []
+    
+    init(products: [Product]) {
+        self.products = products
+    }
+    
+    func printCatalog() {
+        for (index, product) in products.enumerated(){
+            print("\(index + 1). \(product.name) - \(product.price) руб")
+        }
+    }
+    
+    func cell(productName: Product){
+        for i in 0..<products.count {
+            if products[i].name == productName.name {
+                    let removedProduct = products.remove(at: i)
+                    print("Товар \(removedProduct.name) удален из корзины")
+                    return
+                }
+            }
+        print("Товар \(productName.name) не найден в корзине")
+    }
+}
+
+// create product
+let milk = Product(name: "milk", price: 90)
+let bread = Product(name: "bread", price: 50)
+let eggs = Product(name: "eggs", price: 89.90)
+
+// add store product
+let store = Store(products: [milk, bread, eggs])
+
+// print product price and index
+store.printCatalog()
+
+// remove product
+store.cell(productName: milk)
+store.cell(productName: milk)
+
+// final store
+store.printCatalog()
