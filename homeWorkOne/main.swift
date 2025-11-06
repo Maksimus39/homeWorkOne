@@ -1,167 +1,183 @@
-import Foundation
+// task_1
 
-
-class Product {
-    var name: String
-    var price: Double
-    var isAvailable: Bool
+extension String {
     
-    init(name: String, price: Double, isAvailable: Bool) {
-        self.name = name
-        self.price = price
-        self.isAvailable = isAvailable
-    }
+    func isPalindrome() -> Bool {
+           let cleanedString = self.lowercased()
+           return String(cleanedString.reversed()) == cleanedString
+       }
 }
 
-
-var product = Product(name: "zxc", price: 10, isAvailable: true)
-
-
-print(product.name)
+let isPalindrome = "racecar".isPalindrome()
+print("Эта строка является палиндромом? \(isPalindrome)")
 
 
-var person: Product? = Product(name: "asd", price: 3, isAvailable: true)
-
-if let person {
-    print(person.name)
-}
-
-// ------------------------ extension ---------------------------------
-
-extension Product {
-    var description: String{
-        return "\(name), \(price)"
-    }
-    
-    func getPrice() -> Double {
-        return price * 13
-    }
-}
-
-var res = product.description
-var res2 = product.getPrice()
-
-print("res -> \(res)")
-print("res2 -> \(res2)")
-
-
-extension Product {
-    // MARK: - в extension нельзя ставить свойства var let но можно вычисляемые get set
-    
-    // var count: Number
-    
-    
-    
-    // MARK: second parth
-    func getPrice2() -> Double {
-        return price * 3.0
-    }
-}
-
-var priceProduct = product.getPrice2()
-
-print("priceProduct -> \(priceProduct)")
-
-
-// extension type
-
-func sqrt(number: Int) -> Int {
-    number * number
-}
-
+// task_2
 
 extension Int {
-    func sqrt() -> Int {
-        self * self
-    }
     
-    func random() -> Int {
-        return Int.random(in: self...100)
-    }
-    
-    func isOddValue() -> Bool {
-        return self % 2 == 0
+    func squared() -> Int {
+        return self * self
     }
 }
 
-var res10 = 10.sqrt()
-print("res10 -> \(res10)")
 
-var res1 = 1.random()
-print("res1 -> \(res1)")
+let squaredNumber = 5.squared()
+print("Квадрат этого числа: \(squaredNumber)")
 
 
-var res6 = 6.isOddValue()
-print("res6 -> \(res6)")
+// task_3
 
-
-
-// protocol -> SOLID вечером посмотреть и попробовать понять
-
-
-protocol NetworkProtocol {
-    // svoystvo
-    var url: String { get set }
+extension Person {
     
-    
-    // method
-    func sendRequest() -> String
-    func getData() -> String
-}
-
-// под protocol подпишутся class struct enum
-
-class Network: NetworkProtocol {
-    var url: String = ""
-    
-    func sendRequest() -> String {
-        "sendRequest"
-    }
-    
-    func getData() -> String {
-        "getData"
+    func introduce() -> String {
+        return "Здравствуйте, меня зовут \(name). Я \(age)-летний(ая)."
     }
 }
 
-var sendRequest = Network()
 
-print(sendRequest.sendRequest())
-print(sendRequest.getData())
-
-
-class MockServer: NetworkProtocol {
-    var url: String = ""
+class Person {
+    var name: String
+    var age: Int
     
-    func sendRequest() -> String {
-        "sendRequest mock"
-    }
-    
-    func getData() -> String {
-        "getData mock"
+    init(name: String, age: Int) {
+        self.name = name
+        self.age = age
     }
 }
 
-var netWork = Network()
-var mockServer = MockServer()
-netWork.url = " -> www.google.com <- "
-
-print(netWork.url)
-print(netWork.getData() == mockServer.getData())
-print(netWork.sendRequest() == mockServer.sendRequest())
+let user = Person(name: "Александр", age: 25)
+print(user.introduce())
 
 
-class ViewModel {
-    var service: NetworkProtocol
+
+// task_4
+
+protocol Drawable {
+    func draw() -> String
+}
+
+class Circle: Drawable {
+    var radius: Double
     
-    init(service: NetworkProtocol) {
-        self.service = service
+    init(radius: Double) {
+        self.radius = radius
     }
     
-    func load() -> String {
-        service.getData()
+    func draw() -> String {
+         "Рисую круг радиусом \(radius)"
     }
 }
 
-var viewModel = ViewModel(service: MockServer())
-print(viewModel.load())
+class Square: Drawable {
+    let side: Double
+    
+    init(side: Double) {
+        self.side = side
+    }
+    
+    func draw() -> String {
+         "Рисую квадрат со стороной \(side)"
+    }
+}
 
+let circle: Drawable = Circle(radius: 10)
+let square: Drawable = Square(side: 5)
+
+print(circle.draw())
+print(square.draw())
+
+
+// task_5
+
+protocol Calculate {
+    
+    func calculate(a: Int, b: Int) -> Int
+}
+
+
+struct Adder : Calculate {
+    
+    func calculate(a: Int, b: Int) -> Int {
+        return a + b
+    }
+}
+
+struct Multiplier : Calculate {
+    func calculate(a: Int, b: Int) -> Int {
+        return a * b
+    }
+}
+
+let adder = Adder()
+let multiplier = Multiplier()
+
+print("Сумма: \(adder.calculate(a: 5, b: 3))")
+print("Произведение: \(multiplier.calculate(a: 5, b: 3))")
+
+
+// task_6
+
+protocol Printable {
+     
+    func printInfo() -> String
+}
+
+class Car: Printable {
+    var model: String
+    
+    init(model: String) {
+        self.model = model
+    }
+    
+    func printInfo() -> String {
+        "Модель автомобиля марки \(model)"
+    }
+}
+
+
+class Phone: Printable {
+    var brand: String
+    
+    init(brand: String) {
+        self.brand = brand
+    }
+    
+    func printInfo() -> String {
+        "Марка модели телефона \(brand)"
+    }
+}
+
+let car: Printable = Car(model: "BMW")
+let phone: Printable = Phone(brand: "Samsung")
+
+print(car.printInfo())
+print(phone.printInfo())
+    
+
+
+// task_7
+
+protocol Named {
+    var name: String { get }
+}
+
+class Dog: Named {
+    var name: String
+    
+    init(name: String) {
+        self.name = name
+    }
+}
+
+
+struct Book: Named {
+    var name: String
+}
+
+
+var dogName = Dog(name: "Red")
+print(dogName.name)
+
+var bookName = Book(name: "Head First Swift")
+print(bookName.name)
