@@ -1,160 +1,228 @@
-// ------------------ Concatenation --------------
+// Абстракции (ООП)
 
-// task_1
+import Foundation
 
-let firstName:String = "Максим"
-let lastName:String = "Минаков"
-let fullName:String = firstName + " " + lastName
 
-print("fullName -> \(fullName)")
+// DI
 
+protocol DataNetworkProtocol: AnyObject {
+    func fetchData(url: String)
+}
 
+protocol FileStorageDataNetworkProtocol: DataNetworkProtocol {
+    func uploadData(to url: String)
+}
 
-// task_2
-
-let age:UInt8 = 42
-
-let resultMessage = "Меня зовут " + firstName + ", и мне " + String(age) + " года."
-print("resultMessage -> \(resultMessage)")
-
-
-// task 3
-
-print("Введите первое число.")
-let firstNumber = Int(readLine()!)!
-
-print("Введите второе число.")
-let secondNumber = Int(readLine()!)!
-
-let sumResult = firstNumber + secondNumber
-let sumFirstandSecondNumber = "Сумма чисел " + String(firstNumber) + " и " + String(secondNumber) + " равна " + String(sumResult) + "."
-print("sumFirstandSecondNumber -> \(sumFirstandSecondNumber)")
-
-
-
-
-// --------------------- string interpolation ---------------
-
-// task_1
-
-let ageTestIntorpolation:UInt8 = 42
-
-let resultMessageInterpolation = "Меня зовут \(firstName), и мне \(age) года."
-print("resultMessageInterpolation -> \(resultMessageInterpolation)")
-
-
-// task_2
-
-print("Введите ваш вес в кг:")
-let weight = Double(readLine()!)!
-
-print("Введите ваш рост в см:")
-let heightCm = Double(readLine()!)!
-
-let heightM = heightCm / 100
-
-let bmi = weight / (heightM * heightM)
-
-print("Ваш ИМТ равен: \(bmi)")
-
-
-
-// task_3
-
-let productName:String = "MacBooK Air"
-let price:Int = 54_000
-let quantity:Int = 22
-
-let totalPrice = "Вы добавили в корзину \(quantity) шт. Товара \(productName) на сумму \(price * quantity) руб"
-
-print("totalPrice -> \(totalPrice)")
-
-
-
-// ----------------- main data types ------------
-
-// task_1
-
-var minIntSixTeen:Int16 = -32_768
-var numberUintEight:UInt8 = 200
-var numberDouble:Double = 3.1415926535
-var isBool:Bool = false
-let message:String = "Боятся нужно только Бога"
-
-
-
-// task_2
-
-print("Пользователь, введите целое число?")
-
-let inputNumber = Int(readLine()!)!
-
-let squareNumber = inputNumber * inputNumber
-print("Результат возведения числа в квадрат равен \(squareNumber)")
-
-
-// task_3
-
-let inputNumberTwo = 42
-let isEven:Bool
-
-isEven = inputNumberTwo % 2 == 0
-print("Введённое число является \(isEven) значением.")
-
-
-
-
-// --------------------- variable and constant -------------------------
-
-// task_1
-
-var temperature:Int8 = 7
-temperature = 10
-
-
-// task_2
-
-let birthYear:Int16 = 1983          // Выбрал данный тип так как было время и до нашей эры а более чем 32 века у нас значительный запас
-//birthYear = 1982                  // константа подразумевает объявление присвоенного значения в переменной единожды
-
-
-// task_3
-
-var count = 10
-//count = "Mobile IOS developer"
-
-/*
- Тут произошло следующее: я могу ошибаться но или компилятор
-  или интерпритатор по умолчанию задаст переменной тип при
-  объявлении без явного присвоения типа как type notation
-  а потом я вмешиваюсь и явно пытаюсь изменить не только значение
-  но и сам тип данных и язык это не допустит
- */
-
-
-
-// ---------------------- if/else ------------------
-
-// task_1
-
-let testNumber = 345_123
-
-if testNumber > 0 {
-    print("Число \(testNumber), является положительным")
-} else if testNumber < 0 {
-    print("Число \(testNumber), является отрицательным")
-} else {
-    print("Число \(testNumber), является нулём")
+protocol CachDataNetworkProtocol: FileStorageDataNetworkProtocol {
+    func getCacheData(for url: String)
 }
 
 
-
-// task_2
-
-let userAge = 42
-
-if userAge >= 18 {
-    print("Доступ разрешён!")
-} else {
-    print("Доступ запрещён!")
+class Network: DataNetworkProtocol {
+    
+    var text: String = "Hello world"
+    func fetchData(url: String) {
+        print("Fetching data from \(url)")
+    }
 }
+
+
+class FileStorage: FileStorageDataNetworkProtocol {
+    func uploadData(to url: String) {
+        print("Hello data to \(url)")
+    }
+    
+    func fetchData(url: String) {
+        print("Hy i`am is company file storage to \(url)")
+    }
+}
+
+// 1
+var someData: FileStorageDataNetworkProtocol = FileStorage()
+someData.uploadData(to: "www.google.com")
+someData.fetchData(url: "www.microsoft.com")
+
+
+// 2
+
+var datas: [DataNetworkProtocol] = [Network(), FileStorage()]
+//print("datas -> \(datas)")
+
+for data in datas {
+    data.fetchData(url: "www.apple.com ->")
+}
+
+
+class Model {
+    
+    var network: DataNetworkProtocol?
+    
+    init(network: DataNetworkProtocol) {
+        self.network = network
+    }
+    
+    func sendRequest() {
+        network?.fetchData(url: "https://example.com")
+    }
+}
+
+
+let network = Network()
+let mockModel = Model(network: network)
+mockModel.sendRequest()
+
+
+
+// primer iz ui
+
+protocol ReloadTableProtocolo {
+    func reloadTable()
+}
+
+protocol SetConstraintProtocol {
+    func setConstraint()
+}
+
+typealias CombinedProtocol = ReloadTableProtocolo & SetConstraintProtocol
+
+class ViewController: CombinedProtocol {
+   
+    func reloadTable() {
+        print("reloadTable")
+    }
+    
+    func setConstraint() {
+        print("setConstraint")
+    }
+}
+
+let res: CombinedProtocol = ViewController()
+res.reloadTable()
+res.setConstraint()
+
+
+// VIPER
+// V - View
+// I - iteractor
+// P - Presenter
+// E - Entities
+// R - Router
+
+
+
+
+// -------------------- EXTENSION -----------------------------
+
+protocol ConnnectProtocol {
+    func startConnection()
+}
+
+extension ConnnectProtocol {
+    func startConnection() {
+        print("startConnection protocol!!!")
+    }
+}
+
+class User: ConnnectProtocol {
+    func startConnection() {
+        print("startConnection protocol!!! from class!!!")
+    }
+}
+
+let user = User()
+user.startConnection()
+
+
+
+// -------------- standart protocol -------------
+
+struct UserEquitable: Equatable, Comparable {
+    static func < (lhs: UserEquitable, rhs: UserEquitable) -> Bool {
+        lhs.age < rhs.age
+    }
+    
+   
+    var name: String
+    var age: Int
+    
+    init(name: String, age: Int) {
+        self.name = name
+        self.age = age
+    }
+}
+
+var userOne = UserEquitable(name: "Maksim", age: 42)
+var userTwo = UserEquitable(name: "Maksim", age: 39)
+
+
+print(userOne == userTwo)
+print(userOne > userTwo)
+
+
+// Hachable
+
+struct KeyType: Hashable {
+    var name: String
+    
+    init(name: String) {
+        self.name = name
+    }
+}
+
+var soveDic: [KeyType: String]
+
+
+
+// protocol Identifiable
+
+struct Item: Identifiable {
+    var id: String = UUID().uuidString
+    var name: String
+    var age: String
+}
+
+
+var item = Item(name: "Maksim", age: "42")
+print("item -> \(item)")
+
+
+
+// guard
+
+class NetworkManager {
+    func fetchData(url: String?, data: Data?){
+        
+        guard url != nil else {return}
+        //
+        //
+        //
+        //
+        //
+        guard data != nil else {return}
+        //
+        //
+        //
+        //
+    }
+}
+
+
+// primer
+
+func calculate(number: Int?) -> Int {
+    if let number {
+        return number * 2
+    }
+    return 0
+}
+
+print(calculate(number: 4))
+
+
+func calculate2(number: Int?) -> Int {
+    guard let number else {return 0}
+    return number * 2
+}
+
+
+print(calculate2(number: 4))
