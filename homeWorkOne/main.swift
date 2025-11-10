@@ -1,86 +1,46 @@
-// closure замыкания лямбда функции
+// task_1
 
-func doSome(){
-    print("Hello")
+// version_1
+let hello = {print("Hello, world!")}
+hello()
+
+
+// version_2 модифицировал задание
+let closure:(_ str: String) -> String = {$0}
+print(closure("Hello, world!"))
+
+
+// task_2
+
+let greet:(String) -> Void = {print("Hello, \($0)!")}
+greet("Maksim")
+
+
+
+// task_3
+
+let add:(Int, Int) -> Int = {$0 + $1}
+print(add(2, 3))
+
+
+// task_4
+
+func doSomething(completionHandler: ()->Void){
+    completionHandler()
 }
 
-let a = doSome
-a()
-
-
-//
-
-func calc(num: Int) -> Int {
-    return num + num
-}
-
-var a2 = calc(num: 4)
-print(a2)
-
-
-// v1
-var calVal: (Int) -> Int = { num in
-    return num * 100
-}
-
-// v2
-var calVal2: (Int) -> Int = { num in
-    num * 100
-}
-
-// 3
-
-var calVal3: (Int) -> Int = { $0 * $0 }
-
-
-//print(calVal(5))
-
-// 4
-
-var calVal4: (Int) -> Int = { $0 * $0 }
-
-func test(closure: (Int) -> Int){
-    print(closure(200))
-}
-
-test(closure: calVal3)
-
-test { num in
-    let random = Int.random(in: 1...100)
-    return num * random
-}
-
-func closureName(name: String, closure: (Int) -> Int){
-    let random = Int.random(in: 0...100)
-    print(name.uppercased(), closure(random))
-}
-
-closureName(name: "Maksim") { num in
-    return num * 2
+doSomething {
+    print("Действие выполнено")
 }
 
 
+// task_5
 
-// primer
-
-func chesIsOdd(number: [Int], completionHandler: (Int) -> Bool) -> [Int] {
-    var numPlus: [Int] = []
-    
-    number.forEach { i in
-        if completionHandler(i) {
-            numPlus.append(i)
-        }
-    }
-    return numPlus
+func squareClosure(to number: Int, completionHandler:(Int) -> Int){
+    print(completionHandler(number))
 }
 
-var numArr = [1,2,3,4,5,6,7,8,9,10]
-numArr.sort { $0 > $1 }
+squareClosure(to: 3, completionHandler: {$0 * $0})
+squareClosure(to: 9, completionHandler: {$0 * $0})
+squareClosure(to: 12, completionHandler: {$0 * $0})
 
-let resultPlusArray = chesIsOdd(number: numArr, completionHandler: { $0 % 2 == 0 })
-let resultMinusArray = chesIsOdd(number: numArr, completionHandler: { $0 % 2 != 0 })
-
-
-print("resultPlusArray -> \(resultPlusArray)")
-print("resultMinusArray -> \(resultMinusArray)")
-print(numArr)
