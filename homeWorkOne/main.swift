@@ -1,5 +1,4 @@
-// ARC - работает с reference type class closure function
-
+// task_1
 
 class Person {
     var name: String
@@ -9,118 +8,121 @@ class Person {
     }
     
     deinit {
-        print("person deinit")
+        print("person deinit --->>>")
     }
 }
 
-// strong
-// weak
+// weak - create strong link
+var person: Person? = Person(name: "John")
+var personCopy = person
+var personCopyTwo = person
 
-var user: Person? = Person(name: "John") // link 1
-weak var user2: Person? = user
-weak var user3 = user2                        // link2 == link1
-user = nil                               // delete link1
-//user2 = nil                            // delete link2
-//user3 = nil
 
-// ARC - если на экзземпляр не ведёт ни одна СИЛЬНАЯ ссылка, то объект удаляется из памяти
-// Если на экземпляр ведёт хотябы одна сильная ссылка то объект не удаляется
+// delete strong link
+person = nil
+personCopy = nil
+personCopyTwo = nil
 
 
 
-// ----------------------------------------------------------------
+// task_2
 
-
-class Owner {
+class PersonTwo {
     var name: String
-    var car: Car?
+    var pet: Dog?
     
     init(name: String) {
         self.name = name
     }
     
     deinit {
-        print("owner deinit")
+        print("PersonTwo deinit --->>>")
     }
 }
 
-
-class Car {
-    var model: String
-    weak var owner: Owner?
+class Dog {
+    var name: String
+    // strong
+    //var owner: PersonTwo?
     
-    init(model: String) {
-        self.model = model
+    // weak
+    weak   var owner: PersonTwo?
+    
+    init(name: String) {
+        self.name = name
     }
     
     deinit {
-        print("car deinit")
+        print("dog deinit")
     }
 }
 
-var owner:Owner? = Owner(name: "John")
-var car:Car? = Car(model: "X5")
+// strong - при сильной ссылке мы не зачистили память
+var personOwner: PersonTwo? = PersonTwo(name: "Wlad")
+var dog: Dog? = Dog(name: "Red")
 
-owner?.car = car
-car?.owner = owner
+personOwner?.pet = dog
+dog?.owner = personOwner
 
-owner = nil
-car = nil
+personOwner = nil     // закомментировать для теста
+dog = nil             // тестирования weak ссылок
+// ----------------------------------------------------------------------------------------------------------
+
+// weak
+var personOwnerCopy: PersonTwo? = PersonTwo(name: "Ivan")
+var dogCopyName: Dog? = Dog(name: "Star")
 
 
+personOwnerCopy?.pet = dogCopyName
+dogCopyName?.owner = personOwnerCopy
 
-// --------------------------------------------------------------------
+personOwnerCopy = nil    // При создании слабой ссылки в двух связных
+dogCopyName = nil        // классах мы можем вызвать deinit в классе и затереть ссылки
+
+// ----------------------------------------------------------------------------------------------------------
 
 
-class ViewController {
-    var name: String = "Maksim"
-    var printName: (()->Void)?
-    
-    func setup() {
-        printName = { [weak self] in
+// task_3
+
+
+// с weak self
+class Downloader {
+    var status: Bool = true
+    var onComplete: (()->Void)?
+    func start(){
+        onComplete = { [weak self] in
             guard let self else {return}
-            print(self.name)
-        } // heap
-    }
-    
-    deinit {
-        print("deinit ViewController")
-    }
-}
-
-var view:ViewController? = ViewController() // 1
-view?.setup()                               // 2
-view?.printName?()
-
-view = nil
-
-
-// ------------------------------------------------------
-
-class Network {
-    func sendReq(completion: (String) -> Void ){
-        completion("some data")
-    }
-}
-
-class ViewModel {
-    var network = Network()
-    var data: String = ""
-    
-    func reg(){
-        network.sendReq { data in
-            self.data = data
+            print(self.status)
         }
     }
     
     deinit {
-        print("ViewModel deinit  ----->")
+        print("downloader deinit")
     }
 }
 
-var vm: ViewModel? = ViewModel()
-vm?.reg()
-print(vm?.data ?? "")
-vm = nil
+var dowload: Downloader? = Downloader()
+dowload?.start()
+dowload = nil
 
 
+// без weak self , так как кложур тоже относится к референс тайп он не может вырваться без записи [weak self] in
+// и поэтому объект имеет утечку памяти
+
+class DownloaderVersionTwo {
+    var status: Bool = true
+    var onComplete: (()->Void)?
+    func start(){
+        onComplete = {
+            print(self.status)
+        }
+    }
+    
+    deinit {
+        print("downloader version two deinit")
+    }
+}
+
+var dowloadVersionTwo: DownloaderVersionTwo? = DownloaderVersionTwo()
+dowloadVersionTwo?.start()
+dowloadVersionTwo = nil
