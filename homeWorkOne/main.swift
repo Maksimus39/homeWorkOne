@@ -92,6 +92,7 @@ class Downloader {
     func start(){
         onComplete = { [weak self] in
             guard let self else {return}
+            self.status = false
             print(self.status)
         }
     }
@@ -114,6 +115,7 @@ class DownloaderVersionTwo {
     var onComplete: (()->Void)?
     func start(){
         onComplete = {
+            self.status = false
             print(self.status)
         }
     }
