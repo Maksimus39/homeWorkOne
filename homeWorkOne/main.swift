@@ -1,160 +1,151 @@
-// ------------------ Concatenation --------------
+// jeneric
 
-// task_1
 
-let firstName:String = "Максим"
-let lastName:String = "Минаков"
-let fullName:String = firstName + " " + lastName
+var arrString: [String] = []
+var arrInt: [Int] = []
 
-print("fullName -> \(fullName)")
 
+// String
+func printItem(item: String){
+    print("Item",item )
+}
 
+printItem(item: "Maksim")
 
-// task_2
 
-let age:UInt8 = 42
+// Int
+func printItem(item: Int){
+    print("Item",item )
+}
 
-let resultMessage = "Меня зовут " + firstName + ", и мне " + String(age) + " года."
-print("resultMessage -> \(resultMessage)")
+printItem(item: 10)
 
 
-// task 3
+// Jeneric
 
-print("Введите первое число.")
-let firstNumber = Int(readLine()!)!
+func printItem<T>(item: T){
+    print( "itemJeneric , \(item)" )
+}
 
-print("Введите второе число.")
-let secondNumber = Int(readLine()!)!
+printItem(item: 22)
+printItem(item: "Larisa")
 
-let sumResult = firstNumber + secondNumber
-let sumFirstandSecondNumber = "Сумма чисел " + String(firstNumber) + " и " + String(secondNumber) + " равна " + String(sumResult) + "."
-print("sumFirstandSecondNumber -> \(sumFirstandSecondNumber)")
 
+// struct
 
+struct Person {}
 
 
-// --------------------- string interpolation ---------------
+let p = Person()
 
-// task_1
+printItem(item: p)
 
-let ageTestIntorpolation:UInt8 = 42
 
-let resultMessageInterpolation = "Меня зовут \(firstName), и мне \(age) года."
-print("resultMessageInterpolation -> \(resultMessageInterpolation)")
 
+//
 
-// task_2
+// 1
+func isEqual<T: Equatable>(a: T, b: T) -> Bool {
+    a == b
+}
 
-print("Введите ваш вес в кг:")
-let weight = Double(readLine()!)!
+// 2
 
-print("Введите ваш рост в см:")
-let heightCm = Double(readLine()!)!
+func isEqualTwo<T>(a: T, b: T) -> Bool where T: Comparable {
+    a == b
+}
 
-let heightM = heightCm / 100
+let res = isEqual(a: 22, b: 12)
+print("res -> \(res)")
+ 
+let resTwo = isEqualTwo(a: 22, b: 12)
+print("resTwo -> \(resTwo)")
 
-let bmi = weight / (heightM * heightM)
 
-print("Ваш ИМТ равен: \(bmi)")
+//
 
+struct Box<T>{
+    var item: T
+}
 
+let boxInt = Box(item: 42)
+let boxString = Box(item: "Maksim")
 
-// task_3
+print(boxInt.item)
+print(boxString.item)
 
-let productName:String = "MacBooK Air"
-let price:Int = 54_000
-let quantity:Int = 22
 
-let totalPrice = "Вы добавили в корзину \(quantity) шт. Товара \(productName) на сумму \(price * quantity) руб"
+struct Pair<T>{
+    var first: T
+    var second: T
+    
+    func swapped() -> Pair<T> {
+        Pair(first: second, second: first)
+    }
+}
 
-print("totalPrice -> \(totalPrice)")
+let pairInt = Pair(first: "42", second: "39")
+print(pairInt.swapped())
 
 
 
-// ----------------- main data types ------------
+// class
 
-// task_1
-
-var minIntSixTeen:Int16 = -32_768
-var numberUintEight:UInt8 = 200
-var numberDouble:Double = 3.1415926535
-var isBool:Bool = false
-let message:String = "Боятся нужно только Бога"
-
-
-
-// task_2
-
-print("Пользователь, введите целое число?")
-
-let inputNumber = Int(readLine()!)!
-
-let squareNumber = inputNumber * inputNumber
-print("Результат возведения числа в квадрат равен \(squareNumber)")
-
-
-// task_3
-
-let inputNumberTwo = 42
-let isEven:Bool
-
-isEven = inputNumberTwo % 2 == 0
-print("Введённое число является \(isEven) значением.")
-
-
-
-
-// --------------------- variable and constant -------------------------
-
-// task_1
-
-var temperature:Int8 = 7
-temperature = 10
-
-
-// task_2
-
-let birthYear:Int16 = 1983          // Выбрал данный тип так как было время и до нашей эры а более чем 32 века у нас значительный запас
-//birthYear = 1982                  // константа подразумевает объявление присвоенного значения в переменной единожды
-
-
-// task_3
-
-var count = 10
-//count = "Mobile IOS developer"
-
-/*
- Тут произошло следующее: я могу ошибаться но или компилятор
-  или интерпритатор по умолчанию задаст переменной тип при
-  объявлении без явного присвоения типа как type notation
-  а потом я вмешиваюсь и явно пытаюсь изменить не только значение
-  но и сам тип данных и язык это не допустит
- */
-
-
-
-// ---------------------- if/else ------------------
-
-// task_1
-
-let testNumber = 345_123
-
-if testNumber > 0 {
-    print("Число \(testNumber), является положительным")
-} else if testNumber < 0 {
-    print("Число \(testNumber), является отрицательным")
-} else {
-    print("Число \(testNumber), является нулём")
+class Stack<Element> {
+    var item: [Element]
+    
+    init(item: [Element]) {
+        self.item = item
+    }
+    
+    func push(_ newItem: Element) {
+        item.append(newItem)
+    }
+    
+    func pop() -> Element? {
+        item.popLast()
+    }
+}
+
+let intStack = Stack(item: [1,2,3])
+intStack.push(4)
+print(intStack.item)
+
+let stringStack = Stack(item: ["a", "b", "d"])
+stringStack.push("c")
+print(stringStack.item)
+stringStack.pop()
+stringStack.pop()
+stringStack.pop()
+print(stringStack.item)
+
+
+// Ассоциативный тип
+
+protocol Storage {
+    associatedtype T
+    
+    func add(_ item: T)
+    func remove(_ item: T) -> Bool
+    func contains(_ item: T) -> Bool
+}
+
+class MemoryStorage: Storage {
+    func remove(_ item: Int) -> Bool {
+        <#code#>
+    }
+    
+    func contains(_ item: Int) -> Bool {
+        <#code#>
+    }
+    
+   
+    func add(_ item: Int) {
+        <#code#>
+    }
 }
 
 
 
-// task_2
 
-let userAge = 42
 
-if userAge >= 18 {
-    print("Доступ разрешён!")
-} else {
-    print("Доступ запрещён!")
-}
